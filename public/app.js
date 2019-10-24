@@ -1,6 +1,6 @@
 const about = `
-  <div>
-    <h3>About</h3>
+  <div style="width: 80%; margin: 0 auto;">
+    <h2>About</h2>
   </div>
 `;
 const home = `
@@ -72,14 +72,17 @@ class App {
       })
         .then(response => {
           // handle token if ok
-          response.headers.forEach(function(value, name) {
-            console.log(name + ": " + value);
-          });
+          // response.headers.forEach(function(value, name) {
+          //   console.log(name + ": " + value);
+          // });
           return response.json();
         })
         .then(data => {
-          console.log("data ->", data);
           window.location.href = "/home";
+          navigator.serviceWorker.register('/sw.js')
+            .then(registration => {
+              registration.showNotification('Participant added!', {})
+            })
         })
         .catch(error => {
           console.log("Error ==>", error);

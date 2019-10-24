@@ -29,3 +29,16 @@ if ('serviceWorker' in navigator) {
     });
   });
 }
+
+
+if (!('PushManager' in window)) {
+  throw new Error('No Push API Support!')
+} else {
+  console.log('support!')
+  window.Notification.requestPermission()
+    .then(persission => {
+      if (persission !== 'granted') {
+        throw new Error('Permission not granted!');
+      } 
+    })
+}
