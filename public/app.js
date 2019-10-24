@@ -1,18 +1,19 @@
-const about = `
+const me = `
   <div style="width: 80%; margin: 0 auto;">
-    <h2>About</h2>
+    <h2>About Me</h2>
   </div>
 `;
-const home = `
+
+const santas = `
   <div style="width: 80%; margin: 0 auto;">
-    <h2>Participants</h2>
+    <h2>Santas</h2>
     <div id="renderList"></div>
   </div>
 `;
 
-const login = `
+const register = `
   <div style="width: 80%; margin: 0 auto;">
-    <h2>Login</h2>
+    <h2>Register</h2>
     <form>
     <label for="fname">Name</label>
     <input type="text" id="fname" name="fname">
@@ -25,8 +26,18 @@ const login = `
   </div>
 `;
 
+const home = `
+  <div style="width: 80%; margin: 0 auto;">
+    <h2>Home</h2>
+  </div>
+`
+
 class App {
   renderHome() {
+    document.querySelector("#app").innerHTML = home;
+  }
+
+  renderSantas() {
     function renderParticipants(element, index, arr) {
       const li = document.createElement("li");
       li.setAttribute("class", "participant");
@@ -34,7 +45,7 @@ class App {
       li.innerHTML = li.innerHTML + element;
     }
 
-    document.querySelector("#app").innerHTML = home;
+    document.querySelector("#app").innerHTML = santas;
     const ul = document.createElement("ul");
     ul.setAttribute("id", "participants");
 
@@ -47,12 +58,12 @@ class App {
       });
   }
 
-  renderAbout() {
-    document.querySelector("#app").innerHTML = about;
+  renderMe() {
+    document.querySelector("#app").innerHTML = me;
   }
 
-  renderLogin() {
-    document.querySelector("#app").innerHTML = login;
+  renderRegister() {
+    document.querySelector("#app").innerHTML = register;
 
     document.querySelector("#button").addEventListener("click", () => {
       const name = document.querySelector("#fname");

@@ -1,19 +1,23 @@
 const app = new App();
 const router = new Router();
 
-router.get("/home", req => {
-  console.log(req.path);
+router.get('/', req => {
   app.renderHome();
 });
 
-router.get("/about", req => {
+router.get("/santas", req => {
   console.log(req.path);
-  app.renderAbout();
+  app.renderSantas();
 });
 
-router.get("/login", req => {
+router.get("/me", req => {
   console.log(req.path);
-  app.renderLogin();
+  app.renderMe();
+});
+
+router.get("/register", req => {
+  console.log(req.path);
+  app.renderRegister();
 });
 
 router.init();
