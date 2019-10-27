@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const Joi = require("joi");
 const mongoose = require("mongoose");
 
-const UserSchema = new mongoose.Schema({
+const SantaSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -24,14 +24,21 @@ const UserSchema = new mongoose.Schema({
   }
 });
 
-UserSchema.methods.generateAuthToken = function() {
-  const token = jwt.sign({ _id: this._id }, process.env.MY_KEY);
+SantaSchema.methods.generateAuthToken = function() {
+  const token = jwt.sign(
+    {
+      _id: this._id,
+      name: this.name,
+      email: this.email
+    },
+    process.env.MY_KEY
+  );
   return token;
 };
 
-const User = mongoose.model("User", UserSchema);
+const Santa = mongoose.model("Santa", SantaSchema);
 
-function validateUser(user) {
+function validateSanta(santa) {
   const schema = {
     name: Joi.string()
       .min(3)
@@ -47,8 +54,8 @@ function validateUser(user) {
       .max(255)
       .required()
   };
-  return Joi.validate(user, schema);
+  return Joi.validate(santa, schema);
 }
 
-exports.User = User;
-exports.validate = validateUser;
+exports.Santa = Santa;
+exports.validate = validateSanta;
