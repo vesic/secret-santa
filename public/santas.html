@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Register</title>
+    <title>Home</title>
     <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -17,24 +17,26 @@
   <body>
     <nav class="navbar navbar-light bg-light">
       <a class="navbar-brand" href="/">Home</a>
-      <a class="nav-link" href="/santas.html">Santas</a>
+      <a class="nav-link" href="/register.html">Register</a>
     </nav>
 
     <div class="container-fluid">
       <div>&nbsp;</div>
-      <h2>Register | Login</h2>
-      <form>
-        <div class="form-group">
-          <label for="name">Name</label>
-          <input class="form-control" id="name" placeholder="Enter name" required />
-        </div>
-        <div class="form-group">
-          <label for="email">Email address</label>
-          <input type="email" class="form-control" id="email" placeholder="Enter email" required />
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-      </form>
+      <h2>Santas</h2>
+
+      <div class="table-responsive">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">Email</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
     </div>
-    <script src="/register.js"></script>
+    <script src="/santas.js"></script>
   </body>
 </html>
