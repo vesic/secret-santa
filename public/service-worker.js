@@ -30,3 +30,13 @@ self.addEventListener("fetch", (event) => {
 // self.addEventListener('message', function(event){
 //   console.log("SW Received Message: " + event);
 // });
+
+self.addEventListener("push", function(event) {
+  console.log("PUSH RCV")
+  const payload = event.data ? event.data.text() : "no payload";
+  event.waitUntil(
+    self.registration.showNotification("ServiceWorker Cookbook", {
+      body: payload
+    })
+  );
+});

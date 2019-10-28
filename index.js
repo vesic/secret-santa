@@ -5,6 +5,7 @@ const express = require("express");
 const app = express();
 app.use(express.static("public"));
 app.use(express.json());
+require('./push.js')(app, '/');
 
 mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true });
 const db = mongoose.connection;
@@ -17,7 +18,8 @@ db.on("error", err => {
 
 app.use("/api/santas", santasRoute);
 app.get("*", (req, res) => {
-  res.sendFile(__dirname + "/public/index.html");
+  // res.sendFile(__dirname + "/public/register.html");
+  res.sendStatus(404);
 });
 
 const port = process.env.PORT || 3000;
