@@ -1,7 +1,7 @@
 const CACHE_NAME = "secret-santa-cache-v1";
 const urls = [
   "index.html",
-  "register.html"
+  "santas.html"
 ]
 
 self.addEventListener("install", (event) => {
@@ -27,15 +27,10 @@ self.addEventListener("fetch", (event) => {
   // );
 });
 
-// self.addEventListener('message', function(event){
-//   console.log("SW Received Message: " + event);
-// });
-
 self.addEventListener("push", function(event) {
-  console.log("PUSH RCV")
   const payload = event.data ? event.data.text() : "no payload";
   event.waitUntil(
-    self.registration.showNotification("ServiceWorker Cookbook", {
+    self.registration.showNotification("Secret Santa", {
       body: payload
     })
   );
