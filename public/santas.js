@@ -1,3 +1,8 @@
+// check token
+if (!isLoggedIn()) {
+  window.location.href = "/";
+}
+
 (async () => {
   let res = await fetch("/api/santas");
   let json = await res.json();
@@ -11,4 +16,6 @@
     cell1.appendChild(document.createTextNode(santa.name));
     cell2.appendChild(document.createTextNode(santa.email));
   });
+  const { name, email } = getCurrentSanta();
+  document.querySelector('#current-santa').innerHTML = `Hola - ${email}`;
 })();

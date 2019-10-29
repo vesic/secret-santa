@@ -9,6 +9,11 @@ function urlB64ToUint8Array(base64String) {
   return outputArray;
 }
 
+// check token
+if (isLoggedIn()) {
+  window.location.href = "/santas.html";
+}
+
 (async () => {
   document.querySelector("button[type='submit']").addEventListener("click", evt => {
     evt.preventDefault();
@@ -29,9 +34,11 @@ function urlB64ToUint8Array(base64String) {
     })
       .then(response => {
         // handle token if ok
-        // response.headers.forEach(function(value, name) {
-        //   console.log(name + ": " + value);
-        // });
+        response.headers.forEach((value, name) => {
+          if (name === 'x-auth-token') {
+            saveToken(value)
+          }
+        });
         return response.json();
       })
       .catch(console.error)

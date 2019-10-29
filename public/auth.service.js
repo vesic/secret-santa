@@ -10,6 +10,10 @@ function saveToken(token) {
   localStorage.setItem("token", token);
 }
 
+function logout() {
+  localStorage.removeItem("token");
+}
+
 function getCurrentSanta() {
   if (isLoggedIn()) {
     const token = this.getToken();

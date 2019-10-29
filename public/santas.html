@@ -16,13 +16,16 @@
 
   <body>
     <nav class="navbar navbar-light bg-light">
-      <a class="navbar-brand" href="/">Home</a>
-      <a class="nav-link" href="/register.html">Register</a>
+      <a class="navbar-brand" href="">Secret Santa</a>
+      <!-- <a class="nav-link" href="/santas.html">Register</a> -->
+      <a href="#" onclick="event.preventDefault(); logout(); window.location.href='/'" style="color: red;">logout</a>
     </nav>
 
     <div class="container-fluid">
       <div>&nbsp;</div>
-      <h2>Santas</h2>
+      <h4 id='current-santa'></h4>
+      <div>&nbsp;</div>
+      <h3>All Santas</h3>
 
       <div class="table-responsive">
         <table class="table table-bordered">
@@ -37,6 +40,7 @@
         </table>
       </div>
     </div>
+    <script src="/auth.service.js"></script>
     <script src="/santas.js"></script>
   </body>
 </html>
