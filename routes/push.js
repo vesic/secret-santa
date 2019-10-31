@@ -11,6 +11,7 @@ module.exports = function(app, route, webPush) {
     if (!subscriptions.has(subscription.keys.auth)) {
       subscriptions.set(subscription.keys.auth, subscription);
     }
+    console.log(subscriptions.entries());
     res.sendStatus(201);
   });
 
@@ -26,9 +27,9 @@ module.exports = function(app, route, webPush) {
   app.get('/launch', async (req, res) => {
     const all = (await Santa.find({}).select('-password'));
     let alreadyAssigned = [];
+    let receiving;
     const pairs = all.map((santa, index, santas) => {
       let allButThis = santas.filter(s => s._id !== santa._id);
-      let receiving;
       for (let santa of allButThis) {
         if (alreadyAssigned.includes(santa)) continue;
         else {
@@ -42,7 +43,12 @@ module.exports = function(app, route, webPush) {
         to: receiving
       }
     })
-    res.send({ table: pairs });
+    console.log('->>');
+    console.log(pairs[0].from);
+    console.log('->>');
+    // let pairsAsMap = pairs.reduce()
+
+    res.send(pairs);
     const promises = Array.from(subscriptions.values()).map(sub =>
       webPush.sendNotification(sub, JSON.stringify(pairs))
     );

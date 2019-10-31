@@ -28,6 +28,7 @@ self.addEventListener("push", function(event) {
   const payload = event.data ? JSON.parse(event.data.text()) : "No payload";
   // if receive string show it
   // if receive complex data type generate string
+  console.log(payload);
   let body =
     typeof payload === "string" || payload instanceof String ? payload : "build string here";
   event.waitUntil(self.registration.showNotification("Secret Santa", { body }));
