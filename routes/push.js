@@ -1,6 +1,14 @@
 const { subscriptions } = require("../shared");
 const { Santa } = require("../models/santa");
 
+function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
 module.exports = function(app, route, webPush) {
   app.get("/vapidPublicKey", function(req, res) {
     res.send(process.env.VAPID_PUBLIC_KEY);
@@ -28,24 +36,12 @@ module.exports = function(app, route, webPush) {
 
 
   app.get('/launch', async (req, res) => {
-    const all = (await Santa.find({}).select('-password'));
-    let alreadyAssigned = [];
-    let receiving;
-    const pairs = all.map((santa, index, santas) => {
-      let allButThis = santas.filter(s => s._id !== santa._id);
-      for (let santa of allButThis) {
-        if (alreadyAssigned.includes(santa)) continue;
-        else {
-          alreadyAssigned.push(santa);
-          receiving = santa._id;
-          break;
-        }
-      }
-      return {
-        from: santa._id,
-        to: receiving
-      }
-    })
+    const santas = shuffle((await Santa.find({}).select('_id')))
+    let pairs = []
+    for (let i = 0; i < santas.length - 1; i++) {
+      pairs = [...pairs, { from: santas[i], to: santas[i+1]}]
+    }
+    pairs = [...pairs, { from: santas[santas.length - 1], to: santas[0]}]
     const promises = pairs.map(async pair => {
       let from = await Santa.findById(pair.from);
       let to = await Santa.findById(pair.to);
