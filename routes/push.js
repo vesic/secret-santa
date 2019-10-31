@@ -16,7 +16,7 @@ module.exports = function(app, route, webPush) {
 
   app.get("/notify-all", async (req, res) => {
     const promises = Array.from(subscriptions.values()).map(sub =>
-      webPush.sendNotification(sub, "Hola.")
+      webPush.sendNotification(sub, JSON.stringify("Notify All!"))
     );
     await Promise.all(promises);
     res.sendStatus(201);

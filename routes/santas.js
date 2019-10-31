@@ -34,10 +34,9 @@ module.exports = function(app, route, webPush) {
     res.header("x-auth-token", token).send({
       _id: santa._id
     });
-    // chect the order
     // todo: is next block ok to call after res.send
     const promises = Array.from(subscriptions.values()).map(sub =>
-      webPush.sendNotification(sub, "Hola.")
+      webPush.sendNotification(sub, JSON.stringify("Hola!"))
     );
     await Promise.all(promises);
   });

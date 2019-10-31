@@ -1,11 +1,8 @@
 const CACHE_NAME = "secret-santa-cache-v1";
-const urls = [
-  "index.html",
-  "santas.html"
-]
+const urls = ["index.html", "santas.html"];
 
-self.addEventListener("install", (event) => {
-  console.log('install...');
+self.addEventListener("install", event => {
+  console.log("install...");
   // // Perform install steps
   // event.waitUntil(
   //   caches.open(CACHE_NAME).then(function(cache) {
@@ -15,7 +12,7 @@ self.addEventListener("install", (event) => {
   // );
 });
 
-self.addEventListener("fetch", (event) => {
+self.addEventListener("fetch", event => {
   // event.respondWith(
   //   caches.match(event.request).then(function(response) {
   //     // Cache hit - return response
@@ -28,13 +25,10 @@ self.addEventListener("fetch", (event) => {
 });
 
 self.addEventListener("push", function(event) {
-  const payload = event.data ? event.data.text() : "no payload";
-  // todo: if string show
-  // if not iterate
-  console.log(JSON.parse(payload));
-  event.waitUntil(
-    self.registration.showNotification("Secret Santa", {
-      body: 'Default message'
-    })
-  );
+  const payload = event.data ? JSON.parse(event.data.text()) : "No payload";
+  // if receive string show it
+  // if receive complex data type generate string
+  let body =
+    typeof payload === "string" || payload instanceof String ? payload : "build string here";
+  event.waitUntil(self.registration.showNotification("Secret Santa", { body }));
 });
