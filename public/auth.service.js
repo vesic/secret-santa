@@ -12,6 +12,14 @@ function saveToken(token) {
 
 function logout() {
   localStorage.removeItem("token");
+  navigator.serviceWorker.getRegistrations().then(function(registrations) {
+    for (let registration of registrations) {
+      console.log(registration);
+      registration.unregister();
+    }
+  });
+  window.location.href='/'
+  window.location.reload();
 }
 
 function getCurrentSanta() {

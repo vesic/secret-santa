@@ -27,19 +27,21 @@ module.exports = function(app, route, webPush) {
       registration: JSON.stringify(subscriptions.get(req.body.registration))
     });
     santa.password = await bcrypt.hash(santa.password, 10);
+    const santas = await Santa.find({});
     await santa.save();
     const token = santa.generateAuthToken();
+    // todo: ?delete
     // add santa to event participants
     // note this is different than subscriptions array
-    santas.push(santa);
+    // santas.push(santa);
     res.header("x-auth-token", token).send({
       _id: santa._id
     });
     // todo: is next block ok to call after res.send
-    // const promises = Array.from(subscriptions.values()).map(sub =>
-    //   webPush.sendNotification(sub, JSON.stringify("Hola!"))
-    // );
-    // await Promise.all(promises);
+    const promises = santas.map(current =>
+      webPush.sendNotification(JSON.parse(current.registration), JSON.stringify(`${santa.name} register!`))
+    );
+    await Promise.all(promises);
   });
 
   // utility routes
