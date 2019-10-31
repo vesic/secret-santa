@@ -19,6 +19,7 @@ if (isLoggedIn()) {
     evt.preventDefault();
     const name = document.querySelector("#name");
     const email = document.querySelector("#email");
+    const registration = localStorage.getItem('keys:auth')
     // const password = document.querySelector("#pass");
     fetch("/api/santas", {
       method: "POST",
@@ -29,7 +30,8 @@ if (isLoggedIn()) {
       body: JSON.stringify({
         name: name.value,
         email: email.value,
-        password: "randompass123"
+        password: "randompass123",
+        registration: registration ? registration : ""
       })
     })
       .then(response => {
@@ -78,6 +80,10 @@ if (isLoggedIn()) {
         body: JSON.stringify({
           subscription: subscription
         })
-      });
+      })
+      .then(res => res.json())
+      .then((res) => {
+        localStorage.setItem('keys:auth', res['subscription.keys.auth'])
+      })
     });
 })();

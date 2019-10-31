@@ -21,6 +21,9 @@ const SantaSchema = new mongoose.Schema({
     required: true,
     minlength: 3,
     maxlength: 255
+  },
+  registration: {
+    type: String
   }
 });
 
@@ -52,7 +55,8 @@ function validateSanta(santa) {
     password: Joi.string()
       .min(3)
       .max(255)
-      .required()
+      .required(),
+    registration: Joi.string()
   };
   return Joi.validate(santa, schema);
 }

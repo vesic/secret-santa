@@ -12,12 +12,15 @@ module.exports = function(app, route, webPush) {
       subscriptions.set(subscription.keys.auth, subscription);
     }
     console.log(subscriptions.entries());
-    res.sendStatus(201);
+    res.status(201).send({
+      'subscription.keys.auth': subscription.keys.auth
+    })
   });
 
   app.get("/notify-all", async (req, res) => {
-    const promises = Array.from(subscriptions.values()).map(sub =>
-      webPush.sendNotification(sub, JSON.stringify("Notify All!"))
+    const registrations = (await Santa.find({})).map(s => s.registration);
+    const promises = registrations.map(reg =>
+      webPush.sendNotification(JSON.parse(reg), JSON.stringify("Notify All!"))
     );
     await Promise.all(promises);
     res.sendStatus(201);
@@ -34,7 +37,7 @@ module.exports = function(app, route, webPush) {
         if (alreadyAssigned.includes(santa)) continue;
         else {
           alreadyAssigned.push(santa);
-          receiving = santa;
+          receiving = santa._id;
           break;
         }
       }
@@ -43,15 +46,12 @@ module.exports = function(app, route, webPush) {
         to: receiving
       }
     })
-    console.log('->>');
-    console.log(pairs[0].from);
-    console.log('->>');
-    // let pairsAsMap = pairs.reduce()
-
-    res.send(pairs);
-    const promises = Array.from(subscriptions.values()).map(sub =>
-      webPush.sendNotification(sub, JSON.stringify(pairs))
-    );
+    const promises = pairs.map(async pair => {
+      let from = await Santa.findById(pair.from);
+      let to = await Santa.findById(pair.to);
+      return webPush.sendNotification(JSON.parse(from.registration), JSON.stringify(to.email))
+    });
     await Promise.all(promises);
+    res.send(pairs);
   });
 };

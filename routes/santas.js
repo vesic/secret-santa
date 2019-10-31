@@ -23,7 +23,8 @@ module.exports = function(app, route, webPush) {
     santa = new Santa({
       name: req.body.name,
       password: req.body.password,
-      email: req.body.email
+      email: req.body.email,
+      registration: JSON.stringify(subscriptions.get(req.body.registration))
     });
     santa.password = await bcrypt.hash(santa.password, 10);
     await santa.save();
@@ -35,10 +36,10 @@ module.exports = function(app, route, webPush) {
       _id: santa._id
     });
     // todo: is next block ok to call after res.send
-    const promises = Array.from(subscriptions.values()).map(sub =>
-      webPush.sendNotification(sub, JSON.stringify("Hola!"))
-    );
-    await Promise.all(promises);
+    // const promises = Array.from(subscriptions.values()).map(sub =>
+    //   webPush.sendNotification(sub, JSON.stringify("Hola!"))
+    // );
+    // await Promise.all(promises);
   });
 
   // utility routes
