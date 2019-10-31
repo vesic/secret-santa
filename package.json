@@ -7,7 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "db:purge": "curl http://localhost:3000/api/santas/purge",
     "db:seed": "curl http://localhost:3000/api/santas/seed",
-    "notify-all": "curl http://localhost:3000/notify-all"
+    "notify-all": "curl http://localhost:3000/notify-all",
+    "dev": "./node_modules/.bin/nodemon index",
+    "start": "node index.js"
   },
   "keywords": [],
   "author": "",
@@ -23,6 +25,7 @@
   },
   "devDependencies": {
     "faker": "^4.1.0",
+    "nodemon": "^1.19.4",
     "prettier": "1.18.2"
   }
 }
