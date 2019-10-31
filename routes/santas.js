@@ -1,7 +1,7 @@
-const auth = require("./auth");
-const bcrypt = require("bcryptjs");
-const { Santa, validate } = require("../models/santa");
 const faker = require("faker");
+const bcrypt = require("bcryptjs");
+const auth = require("./auth");
+const { Santa, validate } = require("../models/santa");
 const { subscriptions, santas } = require("../shared");
 
 module.exports = function(app, route, webPush) {
@@ -38,32 +38,6 @@ module.exports = function(app, route, webPush) {
     // todo: is next block ok to call after res.send
     const promises = Array.from(subscriptions.values()).map(sub =>
       webPush.sendNotification(sub, "Hola.")
-    );
-    await Promise.all(promises);
-  });
-
-  app.get(route + '/launch', async (req, res) => {
-    const all = (await Santa.find({}).select('-password'));
-    let alreadyAssigned = [];
-    const pairs = all.map((santa, index, santas) => {
-      let allButThis = santas.filter(s => s._id !== santa._id);
-      let receiving;
-      for (let santa of allButThis) {
-        if (alreadyAssigned.includes(santa)) continue;
-        else {
-          alreadyAssigned.push(santa);
-          receiving = santa;
-          break;
-        }
-      }
-      return {
-        from: santa._id,
-        to: receiving
-      }
-    })
-    res.send({ table: pairs });
-    const promises = Array.from(subscriptions.values()).map(sub =>
-      webPush.sendNotification(sub, JSON.stringify(pairs))
     );
     await Promise.all(promises);
   });
