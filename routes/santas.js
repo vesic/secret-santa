@@ -2,7 +2,7 @@ const auth = require("./auth");
 const bcrypt = require("bcryptjs");
 const { Santa, validate } = require("../models/santa");
 const faker = require("faker");
-const subscriptions = require("../shared/subscriptions.js");
+const { subscriptions, santas } = require("../shared");
 
 module.exports = function(app, route, webPush) {
   app.get(route + "/current", auth, async (req, res) => {
@@ -28,16 +28,47 @@ module.exports = function(app, route, webPush) {
     santa.password = await bcrypt.hash(santa.password, 10);
     await santa.save();
     const token = santa.generateAuthToken();
+    // add santa to event participants
+    // note this is different than subscriptions array
+    santas.push(santa);
     res.header("x-auth-token", token).send({
       _id: santa._id
     });
-    // check the order
+    // chect the order
+    // todo: is next block ok to call after res.send
     const promises = Array.from(subscriptions.values()).map(sub =>
       webPush.sendNotification(sub, "Hola.")
     );
     await Promise.all(promises);
   });
 
+  app.get(route + '/launch', async (req, res) => {
+    const all = (await Santa.find({}).select('-password'));
+    let alreadyAssigned = [];
+    const pairs = all.map((santa, index, santas) => {
+      let allButThis = santas.filter(s => s._id !== santa._id);
+      let receiving;
+      for (let santa of allButThis) {
+        if (alreadyAssigned.includes(santa)) continue;
+        else {
+          alreadyAssigned.push(santa);
+          receiving = santa;
+          break;
+        }
+      }
+      return {
+        from: santa._id,
+        to: receiving
+      }
+    })
+    res.send({ table: pairs });
+    const promises = Array.from(subscriptions.values()).map(sub =>
+      webPush.sendNotification(sub, JSON.stringify(pairs))
+    );
+    await Promise.all(promises);
+  });
+
+  // utility routes
   app.get(route + "/purge", async (req, res) => {
     const santas = await Santa.deleteMany({});
     res.send({

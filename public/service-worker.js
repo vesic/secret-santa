@@ -29,9 +29,12 @@ self.addEventListener("fetch", (event) => {
 
 self.addEventListener("push", function(event) {
   const payload = event.data ? event.data.text() : "no payload";
+  // todo: if string show
+  // if not iterate
+  console.log(JSON.parse(payload));
   event.waitUntil(
     self.registration.showNotification("Secret Santa", {
-      body: payload
+      body: 'Default message'
     })
   );
 });

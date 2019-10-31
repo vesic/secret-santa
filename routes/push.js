@@ -1,4 +1,4 @@
-const subscriptions = require("../shared/subscriptions.js");
+const { subscriptions } = require("../shared");
 
 module.exports = function(app, route, webPush) {
   app.get("/vapidPublicKey", function(req, res) {
