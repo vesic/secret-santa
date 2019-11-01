@@ -11,21 +11,39 @@ function saveToken(token) {
 }
 
 function logout() {
-  localStorage.removeItem("token");
-  navigator.serviceWorker.getRegistrations().then(function(registrations) {
-    for (let registration of registrations) {
-      console.log(registration);
-      registration.unregister();
-    }
-  });
-  window.location.href='/'
-  window.location.reload();
+  let santa = getCurrentSanta();
+  // todo: ideally we should unregister service worker
+  // navigator.serviceWorker.getRegistrations().then(function(registrations) {
+  //   for (let registration of registrations) {
+  //     console.log(registration);
+  //     registration.unregister();
+  //   }
+  // });
+  // todo: find more sutable place for this
+  fetch("/api/santas/log-out", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      id: santa._id
+    })
+  })
+    .then(res => res.json())
+    .then((res) => {
+      // do something w/ response
+    })
+    .finally(() => {
+      localStorage.removeItem("token");
+      window.location.href = "/";
+    });
 }
 
 function getCurrentSanta() {
   if (isLoggedIn()) {
     const token = this.getToken();
-    const { email, name } = JSON.parse(atob(token.split(".")[1]));
-    return { email, name };
+    const { _id, email, name } = JSON.parse(atob(token.split(".")[1]));
+    return { _id, email, name };
   }
 }

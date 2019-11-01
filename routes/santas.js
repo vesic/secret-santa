@@ -44,6 +44,19 @@ module.exports = function(app, route, webPush) {
     await Promise.all(promises);
   });
 
+  // todo: this is workaround
+  // shoud be examined & removed
+  app.post(route + "/log-out", async (req, res) => {
+    let id = req.body.id;
+    if (!id) req.send({ error: 'No id!' });
+    let santa = await Santa.findById(id);
+    santa.registration = undefined;
+    santa.save();
+    res.send({
+      message: "Santa registration removed."
+    })
+  });
+
   // utility routes
   app.get(route + "/purge", async (req, res) => {
     const santas = await Santa.deleteMany({});

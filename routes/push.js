@@ -45,7 +45,7 @@ module.exports = function(app, route, webPush) {
     const promises = pairs.map(async pair => {
       let from = await Santa.findById(pair.from);
       let to = await Santa.findById(pair.to);
-      return webPush.sendNotification(JSON.parse(from.registration), JSON.stringify(to.email))
+      return webPush.sendNotification(JSON.parse(from.registration), JSON.stringify(`You've been assigned ${to.email}!`))
     });
     await Promise.all(promises);
     res.send(pairs);
