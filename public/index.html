@@ -5,12 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Register</title>
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
-      crossorigin="anonymous"
-    />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/styles.css" />
 
     <!-- Add link rel manifest -->
@@ -27,26 +22,29 @@
   </head>
 
   <body>
-    <nav class="navbar navbar-light bg-light">
-      <a class="navbar-brand" href="">Secret Santa</a>
-      <!-- <a class="nav-link" href="/santas.html">Santas</a> -->
-    </nav>
+    <div class="wrapper">
+        <div class="wrapper-content">
+          <img src="./images/santa.svg" alt="santa" width="260">
 
-    <div class="container-fluid">
-      <div>&nbsp;</div>
-      <h2>Join</h2>
-      <form>
-        <div class="form-group">
-          <label for="name">Name</label>
-          <input class="form-control" id="name" placeholder="Enter name" required />
+          <h1>Secret Santa</h1>
+          <p>If you want to be a Secret Santa, please <b>register.</b></p>
+
+          <form>
+            <div class="form-group">
+              <label for="name" hidden>Name</label>
+              <input class="form-control" id="name" placeholder="Name and Surname" required />
+            </div>
+            <div class="form-group">
+              <label for="email" hidden>Email address</label>
+              <input type="email" class="form-control" id="email" placeholder="Email Address" required />
+            </div>
+            <button type="submit" class="btn btn-primary">Register</button>
+          </form>
         </div>
-        <div class="form-group">
-          <label for="email">Email address</label>
-          <input type="email" class="form-control" id="email" placeholder="Enter email" required />
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-      </form>
     </div>
+    <footer>
+      <span>Copyrights @ 2019, Web Team, CCBill. All right reserved. Workshop 2019.</span>
+    </footer>
     <script src="/auth.service.js"></script>
     <script src="/register.js"></script>
   </body>

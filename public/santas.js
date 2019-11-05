@@ -17,5 +17,5 @@ if (!isLoggedIn()) {
     cell2.appendChild(document.createTextNode(santa.email));
   });
   const { name, email } = getCurrentSanta();
-  document.querySelector('#current-santa').innerHTML = `Hola - ${email}`;
+  document.querySelector('#current-santa').innerHTML = `${name}`;
 })();

@@ -5,41 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Home</title>
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
-      crossorigin="anonymous"
-    />
     <link rel="stylesheet" href="/styles.css" />
   </head>
 
   <body>
-    <nav class="navbar navbar-light bg-light">
-      <a class="navbar-brand" href="">Secret Santa</a>
-      <!-- <a class="nav-link" href="/santas.html">Register</a> -->
-      <a href="#" onclick="event.preventDefault(); logout();" style="color: red;">logout</a>
-    </nav>
-
-    <div class="container-fluid">
-      <div>&nbsp;</div>
-      <h4 id='current-santa'></h4>
-      <div>&nbsp;</div>
-      <h3>All Santas</h3>
-
-      <div class="table-responsive">
-        <table class="table table-bordered">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Name</th>
-              <th scope="col">Email</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+    <div class="wrapper">
+      <div class="wrapper-content">
+          <a href="#" onclick="event.preventDefault(); logout();" style="color: red; position: absolute;">logout</a>
+    
+          <img src="./images/thank_you.svg" alt="santa" width="221" class="thank-you">
+    
+          <h1>Thank you!</h1>
+          <p><span id='current-santa'></span>, you have just registered to be an awesome <b>Secret Santa!</b></p>
+    
+          <div class="table-responsive">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Email</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
       </div>
     </div>
+    <footer>
+      <span>Copyrights @ 2019, Web Team, CCBill. All right reserved. Workshop 2019.</span>
+    </footer>
     <script src="/auth.service.js"></script>
     <script src="/santas.js"></script>
   </body>
