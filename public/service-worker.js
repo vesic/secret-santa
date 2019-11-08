@@ -1,4 +1,4 @@
-const CACHE_NAME = "secret-santa-cache-v6";
+const CACHE_NAME = "secret-santa-cache-v2";
 const DATA_CACHE_NAME = 'secret-santa-data-cache-v1';
 
 const FILES_TO_CACHE = [
