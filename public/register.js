@@ -9,7 +9,24 @@ function urlB64ToUint8Array(base64String) {
   return outputArray;
 }
 
-console.log("Register");
+
+function handleNetworkChange() {
+  
+  if (navigator.onLine) {
+    document.body.classList.remove("offline");
+  } else {
+    document.body.classList.add("offline");
+  }
+
+  document.querySelector("button[type='submit']").disabled = !navigator.onLine;
+}
+
+window.addEventListener("load", () => {
+  handleNetworkChange();
+
+  window.addEventListener("online", handleNetworkChange);
+  window.addEventListener("offline", handleNetworkChange);
+});
 
 // check token
 if (isLoggedIn()) {
