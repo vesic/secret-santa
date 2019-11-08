@@ -1,15 +1,32 @@
-const CACHE_NAME = "secret-santa-cache-v1";
+const CACHE_NAME = "secret-santa-cache-v6";
 const DATA_CACHE_NAME = 'secret-santa-data-cache-v1';
 
 const FILES_TO_CACHE = [
+  // PAGES
+  '/',
   'index.html',
   'santas.html',
+
+  // STYLES
   'styles.css',
+  
+  // SCRIPTS
   'auth.service.js',
   'install.js',
   'register.js',
   'santas.js',
-  'service-worker.js',
+
+  // IMAGES
+  'images/congrats.svg',
+  'images/happy.svg',
+  'images/santa_address.svg',
+  'images/santa_stamp.svg',
+  'images/santa.svg',
+  'images/secret_santa_bg.png',
+  'images/secret_santa_icon.svg',
+  'images/shame.svg',
+  'images/thank_you.svg',
+  'images/wondering.svg',
 ];
 
 self.addEventListener("install", event => {
@@ -80,6 +97,7 @@ self.addEventListener('fetch', (event) => {
         console.log(`[Service Worker] STATIC page request:`, event.request)
         return cache.match(event.request)
             .then((response) => {
+              console.log('RESPONSE', response);
               if (response) {
                 console.log(`[Service Worker] STATIC page *** Returned response from cache for ${event.request.url} ***`);
               } else {

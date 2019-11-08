@@ -9,6 +9,8 @@ function urlB64ToUint8Array(base64String) {
   return outputArray;
 }
 
+console.log("Register");
+
 // check token
 if (isLoggedIn()) {
   window.location.href = "/santas.html";
