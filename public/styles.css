@@ -78,6 +78,7 @@ input {
   width: 100%;
   border: 1px solid #00000080;
   border-radius: 3px;
+  cursor: pointer;
 }
 
 .btn.btn-primary {
@@ -98,8 +99,15 @@ input {
   }
 }
 
-.thank-you {
+.santa-icon {
   margin-bottom: 30px;
+}
+
+.notification {
+  color: #DE453A;
+  font-size: 16px;
+  font-weight: 700;
+  margin: 15px 0;
 }
 
 footer {
