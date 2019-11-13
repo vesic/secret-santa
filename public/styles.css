@@ -36,6 +36,22 @@ body {
   padding: 20px 0 85px 0;
 }
 
+.offline-message {
+  display: none;
+}
+
+.register-message {
+  display: block;
+}
+
+.offline .offline-message {
+  display: block;
+}
+
+.offline .register-message {
+  display: none;
+}
+
 h1 {
   font-size: 36px;
   line-height: 49px;
@@ -67,6 +83,10 @@ input {
   height: 40px;
   width: 100%;
   padding: 9px 15px;
+}
+
+button:disabled {
+  cursor: not-allowed;
 }
 
 .btn {
