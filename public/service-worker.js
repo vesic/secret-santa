@@ -110,11 +110,30 @@ self.addEventListener('fetch', (event) => {
 });
 
 self.addEventListener("push", function(event) {
-  const payload = event.data ? JSON.parse(event.data.text()) : "No payload";
+
+  const  payload = event.data ? JSON.parse(event.data.text()) : "No payload";
+  
   // if receive string show it
   // if receive complex data type generate string
-  console.log(payload);
+
+  if (payload.type === "registration") {
+    console.log('[Service Worker] postMessage', payload);
+    self.clients.matchAll().then(
+      clients => {
+        clients.forEach(client => {
+          client.postMessage(payload);
+        })
+      }
+    );
+  }
+
   let body =
-    typeof payload === "string" || payload instanceof String ? payload : "build string here";
+    typeof payload === "string" || payload instanceof String ? payload : buildMessage(payload);
   event.waitUntil(self.registration.showNotification("Secret Santa", { body }));
 });
+
+function buildMessage(data) {
+  if (data.type === "registration") {
+    return `${data.data.name} has just registered.`;
+  }
+}
