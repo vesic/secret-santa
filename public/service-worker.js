@@ -127,10 +127,37 @@ self.addEventListener("push", function(event) {
     );
   }
 
-  let body =
-    typeof payload === "string" || payload instanceof String ? payload : buildMessage(payload);
-  event.waitUntil(self.registration.showNotification("Secret Santa", { body }));
+  let body = null;
+  let actions = [];
+
+  // TODO: Use a different notification name (e.g. Remind All)
+  if (payload === "Notify All!") {
+    body = "Have you bought a present?";
+    actions = [  
+      {action: 'done', title: 'Yes'},  
+      {action: 'not yet', title: 'No'}
+    ];  
+  } else {
+    body = (typeof payload === "string" || payload instanceof String) ? payload : buildMessage(payload);
+  }
+
+  // TODO: Do not show notification if the user already bought a present
+  event.waitUntil(self.registration.showNotification("Secret Santa", { body , actions }));
 });
+
+self.addEventListener('notificationclick', function(event) {  
+
+  event.notification.close();  
+
+  self.clients.matchAll().then(
+    clients => {
+      clients.forEach(client => {
+        client.postMessage(event.action);
+      })
+    }
+  );
+
+}, false);
 
 function buildMessage(data) {
   if (data.type === "registration") {

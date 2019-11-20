@@ -25,6 +25,11 @@ function addSanta(santa) {
 
 navigator.serviceWorker.addEventListener('message', event => {
   if (event.data.type === "registration") {
+    // TODO: Add it to the cache, as well 
     addSanta(event.data.data);
+  }
+
+  if (event.data === "done") {
+    location.href = "/well-done.html";
   }
 });
