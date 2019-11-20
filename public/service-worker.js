@@ -1,5 +1,9 @@
+importScripts("/localforage.js");
+
 const CACHE_NAME = "secret-santa-cache-v2";
 const DATA_CACHE_NAME = 'secret-santa-data-cache-v1';
+
+const isPresentAlreadyBoughtKey = 'isPresentBought'; 
 
 const FILES_TO_CACHE = [
   // PAGES
@@ -43,7 +47,7 @@ self.addEventListener("install", event => {
   self.skipWaiting();
 });
 
-self.addEventListener('activate', (event) => {
+self.addEventListener('activate', async (event) => {
 
   console.log('[ServiceWorker] Activate');
 
@@ -58,6 +62,8 @@ self.addEventListener('activate', (event) => {
       }));
     })
   );
+
+  await localforage.setItem(isPresentAlreadyBoughtKey, false);
 
   self.clients.claim();
 });
@@ -109,7 +115,7 @@ self.addEventListener('fetch', (event) => {
   );
 });
 
-self.addEventListener("push", function(event) {
+self.addEventListener("push", async function(event) {
 
   const  payload = event.data ? JSON.parse(event.data.text()) : "No payload";
   
@@ -129,6 +135,7 @@ self.addEventListener("push", function(event) {
 
   let body = null;
   let actions = [];
+  let showNotification = true;
 
   // TODO: Use a different notification name (e.g. Remind All)
   if (payload === "Notify All!") {
@@ -137,12 +144,14 @@ self.addEventListener("push", function(event) {
       {action: 'done', title: 'Yes'},  
       {action: 'not yet', title: 'No'}
     ];  
+    showNotification = !await localforage.getItem(isPresentAlreadyBoughtKey);
   } else {
     body = (typeof payload === "string" || payload instanceof String) ? payload : buildMessage(payload);
   }
 
-  // TODO: Do not show notification if the user already bought a present
-  event.waitUntil(self.registration.showNotification("Secret Santa", { body , actions }));
+  if (showNotification) {
+    event.waitUntil(self.registration.showNotification("Secret Santa", { body , actions }));
+  }
 });
 
 self.addEventListener('notificationclick', function(event) {  
@@ -156,6 +165,8 @@ self.addEventListener('notificationclick', function(event) {
       })
     }
   );
+
+  localforage.setItem(isPresentAlreadyBoughtKey, event.action === 'done');
 
 }, false);
 
