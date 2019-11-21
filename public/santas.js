@@ -7,12 +7,48 @@ if (!isLoggedIn()) {
   let res = await fetch("/api/santas");
   let json = await res.json();
 
-  json.data.forEach(addSanta);
-  const { name, email } = getCurrentSanta();
+  json.data.forEach(showSanta);
+  const { name } = getCurrentSanta();
   document.querySelector('#current-santa').innerHTML = `${name}`;
 })();
 
-function addSanta(santa) {
+navigator.serviceWorker.addEventListener('message', async (event) => {
+  if (event.data.type === "registration") {
+    const santa = event.data.data;
+    showSanta(santa);
+    await cacheSanta(santa);
+  }
+
+  if (event.data === "done") {
+    location.href = "/well-done.html";
+  }
+});
+
+async function cacheSanta(santa) {
+  try {
+    const { santas, cache, santasKey } = await getSantasFromCache();
+
+    santas.push(santa);
+    
+    const newResponse = new Response(JSON.stringify(santas), { headers: { "Content-Type": "application/json; charset=utf-8" } });
+    await cache.put(santasKey, newResponse);
+  }
+  catch (e) {
+    console.error("ERROR IN CACHING NEW SANTA:", e);
+  }
+}
+
+async function getSantasFromCache() {
+  // TODO: put all constants into a separate file
+  const cache = await caches.open('secret-santa-data-cache-v1');
+  const cachedRequests = await cache.keys();
+  const santasKey = cachedRequests.filter(request => request.url.includes('api/santas'))[0];
+  const santasResponse = await cache.match(santasKey);
+  santas = await santasResponse.json();
+  return { santas: [...santas.data], cache, santasKey };
+}
+
+function showSanta(santa) {
   const table = document.querySelector("table");
   const row = table.insertRow();
   const cell0 = row.insertCell(0);
@@ -22,14 +58,3 @@ function addSanta(santa) {
   cell1.appendChild(document.createTextNode(santa.name));
   cell2.appendChild(document.createTextNode(santa.email));
 }
-
-navigator.serviceWorker.addEventListener('message', event => {
-  if (event.data.type === "registration") {
-    // TODO: Add it to the cache, as well 
-    addSanta(event.data.data);
-  }
-
-  if (event.data === "done") {
-    location.href = "/well-done.html";
-  }
-});

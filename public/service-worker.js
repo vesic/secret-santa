@@ -74,6 +74,8 @@ self.addEventListener('fetch', (event) => {
   // Network falling back to cache strategy
   // https://developers.google.com/web/fundamentals/instant-and-offline/offline-cookbook/#network-falling-back-to-cache  
 
+  // TODO: Maybe would be better to use "cache then network"?
+
   if (event.request.url.includes('/api/')) {
     console.log('[Service Worker] Caching DATA', event.request.url);
     event.respondWith(
