@@ -3,7 +3,8 @@ importScripts("/localforage.js");
 const CACHE_NAME = "secret-santa-cache-v2";
 const DATA_CACHE_NAME = 'secret-santa-data-cache-v1';
 
-const isPresentAlreadyBoughtKey = 'isPresentBought'; 
+const isPresentAlreadyBoughtKey = 'isPresentBought';
+const giftReceiverKey = 'giftReceiver';
 
 const FILES_TO_CACHE = [
   // PAGES
@@ -120,19 +121,18 @@ self.addEventListener('fetch', (event) => {
 self.addEventListener("push", async function(event) {
 
   const  payload = event.data ? JSON.parse(event.data.text()) : "No payload";
+  const isPayloadString = typeof payload === "string" || payload instanceof String;
   
   // if receive string show it
   // if receive complex data type generate string
 
   if (payload.type === "registration") {
-    console.log('[Service Worker] postMessage', payload);
-    self.clients.matchAll().then(
-      clients => {
-        clients.forEach(client => {
-          client.postMessage(payload);
-        })
-      }
-    );
+    postMessageToClients(payload);
+  }
+
+  if (isPayloadString && payload.includes("gift to")) {
+    postMessageToClients(payload);
+    await localforage.setItem(giftReceiverKey, payload);
   }
 
   let body = null;
@@ -148,7 +148,7 @@ self.addEventListener("push", async function(event) {
     ];  
     showNotification = !await localforage.getItem(isPresentAlreadyBoughtKey);
   } else {
-    body = (typeof payload === "string" || payload instanceof String) ? payload : buildMessage(payload);
+    body = isPayloadString ? payload : buildMessage(payload);
   }
 
   if (showNotification) {
@@ -171,6 +171,15 @@ self.addEventListener('notificationclick', function(event) {
   localforage.setItem(isPresentAlreadyBoughtKey, event.action === 'done');
 
 }, false);
+
+function postMessageToClients(payload) {
+  console.log('[Service Worker] postMessage', payload);
+  self.clients.matchAll().then(clients => {
+    clients.forEach(client => {
+      client.postMessage(payload);
+    });
+  });
+}
 
 function buildMessage(data) {
   if (data.type === "registration") {

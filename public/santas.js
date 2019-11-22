@@ -7,13 +7,27 @@ if (!isLoggedIn()) {
   let res = await fetch("/api/santas");
   let json = await res.json();
 
+  // TODO: https://stackoverflow.com/questions/43043113/how-to-force-reloading-a-page-when-using-browser-back-button
+  // (when we navigate back from other page using Back button, data are not loaded properly if new registrations happened in the meantime)
+  console.log("FETCHED SANTAS: ", json);
+
   json.data.forEach(showSanta);
   const { name } = getCurrentSanta();
+  const giftReceiverMsg = await localforage.getItem("giftReceiver");
+  if (giftReceiverMsg) {
+    showGiftReceiverMsg(giftReceiverMsg);
+  }
   document.querySelector('#current-santa').innerHTML = `${name}`;
 })();
 
 navigator.serviceWorker.addEventListener('message', async (event) => {
-  if (event.data.type === "registration") {
+
+  // TODO: Refactor this. Change notification format to {type, data}
+  if ((typeof event.data === "string" || event.data instanceof String) && event.data.includes("gift to")) {
+    showGiftReceiverMsg(event.data);
+  }
+
+  if ((event.data || {}).type === "registration") {
     const santa = event.data.data;
     showSanta(santa);
     await cacheSanta(santa);
@@ -23,6 +37,10 @@ navigator.serviceWorker.addEventListener('message', async (event) => {
     location.href = "/well-done.html";
   }
 });
+
+function showGiftReceiverMsg(message) {
+  document.querySelector("p.notification").innerHTML = message;
+}
 
 async function cacheSanta(santa) {
   try {
