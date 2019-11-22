@@ -130,9 +130,9 @@ self.addEventListener("push", async function(event) {
     postMessageToClients(payload);
   }
 
-  if (isPayloadString && payload.includes("gift to")) {
+  if (payload.type === "launch") {
     postMessageToClients(payload);
-    await localforage.setItem(giftReceiverKey, payload);
+    await localforage.setItem(giftReceiverKey, payload.data);
   }
 
   let body = null;
@@ -184,5 +184,8 @@ function postMessageToClients(payload) {
 function buildMessage(data) {
   if (data.type === "registration") {
     return `${data.data.name} has just registered.`;
+  }
+  if (data.type === "launch") {
+    return `You should buy a gift to ${data.data.name}!`;
   }
 }

@@ -13,21 +13,24 @@ if (!isLoggedIn()) {
 
   json.data.forEach(showSanta);
   const { name } = getCurrentSanta();
-  const giftReceiverMsg = await localforage.getItem("giftReceiver");
-  if (giftReceiverMsg) {
-    showGiftReceiverMsg(giftReceiverMsg);
+  const giftReceiver = await localforage.getItem("giftReceiver");
+  if (giftReceiver) {
+    showGiftReceiverMsg(giftReceiver);
   }
   document.querySelector('#current-santa').innerHTML = `${name}`;
 })();
 
 navigator.serviceWorker.addEventListener('message', async (event) => {
 
-  // TODO: Refactor this. Change notification format to {type, data}
-  if ((typeof event.data === "string" || event.data instanceof String) && event.data.includes("gift to")) {
-    showGiftReceiverMsg(event.data);
+  if (!event.data) {
+    return;
   }
 
-  if ((event.data || {}).type === "registration") {
+  if (event.data.type === "launch") {
+    showGiftReceiverMsg(event.data.data);
+  }
+
+  if (event.data.type === "registration") {
     const santa = event.data.data;
     showSanta(santa);
     await cacheSanta(santa);
@@ -38,8 +41,8 @@ navigator.serviceWorker.addEventListener('message', async (event) => {
   }
 });
 
-function showGiftReceiverMsg(message) {
-  document.querySelector("p.notification").innerHTML = message;
+function showGiftReceiverMsg(receiver) {
+  document.querySelector("p.notification").innerHTML = `You should buy a gift to ${receiver.name} (${receiver.email})!`;
 }
 
 async function cacheSanta(santa) {
