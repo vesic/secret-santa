@@ -1,5 +1,10 @@
+importScripts("/localforage.js");
+
 const CACHE_NAME = "secret-santa-cache-v2";
 const DATA_CACHE_NAME = 'secret-santa-data-cache-v1';
+
+const isPresentAlreadyBoughtKey = 'isPresentBought';
+const giftReceiverKey = 'giftReceiver';
 
 const FILES_TO_CACHE = [
   // PAGES
@@ -43,7 +48,7 @@ self.addEventListener("install", event => {
   self.skipWaiting();
 });
 
-self.addEventListener('activate', (event) => {
+self.addEventListener('activate', async (event) => {
 
   console.log('[ServiceWorker] Activate');
 
@@ -59,6 +64,8 @@ self.addEventListener('activate', (event) => {
     })
   );
 
+  await localforage.setItem(isPresentAlreadyBoughtKey, false);
+
   self.clients.claim();
 });
 
@@ -67,6 +74,8 @@ self.addEventListener('fetch', (event) => {
 
   // Network falling back to cache strategy
   // https://developers.google.com/web/fundamentals/instant-and-offline/offline-cookbook/#network-falling-back-to-cache  
+
+  // TODO: Maybe would be better to use "cache then network"?
 
   if (event.request.url.includes('/api/')) {
     console.log('[Service Worker] Caching DATA', event.request.url);
@@ -109,12 +118,74 @@ self.addEventListener('fetch', (event) => {
   );
 });
 
-self.addEventListener("push", function(event) {
-  const payload = event.data ? JSON.parse(event.data.text()) : "No payload";
+self.addEventListener("push", async function(event) {
+
+  const  payload = event.data ? JSON.parse(event.data.text()) : "No payload";
+  const isPayloadString = typeof payload === "string" || payload instanceof String;
+  
   // if receive string show it
   // if receive complex data type generate string
-  console.log(payload);
-  let body =
-    typeof payload === "string" || payload instanceof String ? payload : "build string here";
-  event.waitUntil(self.registration.showNotification("Secret Santa", { body }));
+
+  if (payload.type === "registration") {
+    postMessageToClients(payload);
+  }
+
+  if (payload.type === "launch") {
+    postMessageToClients(payload);
+    await localforage.setItem(giftReceiverKey, payload.data);
+  }
+
+  let body = null;
+  let actions = [];
+  let showNotification = true;
+
+  // TODO: Use a different notification name (e.g. Remind All)
+  if (payload === "Notify All!") {
+    body = "Have you bought a present?";
+    actions = [  
+      {action: 'done', title: 'Yes'},  
+      {action: 'not yet', title: 'No'}
+    ];  
+    showNotification = !await localforage.getItem(isPresentAlreadyBoughtKey);
+  } else {
+    body = isPayloadString ? payload : buildMessage(payload);
+  }
+
+  if (showNotification) {
+    event.waitUntil(self.registration.showNotification("Secret Santa", { body , actions }));
+  }
 });
+
+self.addEventListener('notificationclick', function(event) {  
+
+  event.notification.close();  
+
+  self.clients.matchAll().then(
+    clients => {
+      clients.forEach(client => {
+        client.postMessage(event.action);
+      })
+    }
+  );
+
+  localforage.setItem(isPresentAlreadyBoughtKey, event.action === 'done');
+
+}, false);
+
+function postMessageToClients(payload) {
+  console.log('[Service Worker] postMessage', payload);
+  self.clients.matchAll().then(clients => {
+    clients.forEach(client => {
+      client.postMessage(payload);
+    });
+  });
+}
+
+function buildMessage(data) {
+  if (data.type === "registration") {
+    return `${data.data.name} has just registered.`;
+  }
+  if (data.type === "launch") {
+    return `You should buy a gift to ${data.data.name}!`;
+  }
+}

@@ -8,6 +8,8 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/styles.css" />
 
+    
+
     <!-- Add link rel manifest -->
     <link rel="manifest" href="manifest.json">
     <!-- Add iOS meta tags and icons -->
@@ -27,24 +29,29 @@
           <img src="./images/santa.svg" alt="santa" width="260">
 
           <h1>Secret Santa</h1>
-          <p class="register-message">If you want to be a Secret Santa, please <b>register.</b></p>
+          <!-- <p class="register-message">If you want to be a Secret Santa, please <b>register.</b></p> -->
+          <p class="register-message">
+            Share a few details with our Secret Santa Generator
+          </p>
           <p class="offline-message">You are offline, so you cannot register now.</p>
 
           <form>
             <div class="form-group">
               <label for="name" hidden>Name</label>
-              <input class="form-control" id="name" placeholder="Name and Surname" required />
+              <input class="form-control" id="name" placeholder="Enter name" required />
             </div>
             <div class="form-group">
               <label for="email" hidden>Email address</label>
-              <input type="email" class="form-control" id="email" placeholder="Email Address" required />
+              <input type="email" class="form-control" id="email" placeholder="Enter email" required />
             </div>
             <button type="submit" class="btn btn-primary">Register</button>
           </form>
         </div>
     </div>
     <footer>
-      <span>Copyrights @ 2019, Web Team, CCBill. All right reserved. Workshop 2019.</span>
+      <span>
+        Made with <span style="color: #e25555;">&#9829;</span> by Web Application Developers Team
+      </span>
     </footer>
     <script src="/auth.service.js"></script>
     <script src="/register.js"></script>

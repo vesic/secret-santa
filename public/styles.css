@@ -47,6 +47,7 @@ body {
 
 .register-message {
   display: block;
+  margin-top: 2em;
 }
 
 .offline .offline-message {

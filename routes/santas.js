@@ -39,7 +39,10 @@ module.exports = function(app, route, webPush) {
     });
     // todo: is next block ok to call after res.send
     const promises = santas.map(current =>
-      webPush.sendNotification(JSON.parse(current.registration), JSON.stringify(`${santa.name} register!`))
+      webPush.sendNotification(JSON.parse(current.registration), JSON.stringify({
+        data: santa,
+        type: "registration",
+      }))
     );
     await Promise.all(promises);
   });
