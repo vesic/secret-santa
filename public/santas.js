@@ -45,8 +45,16 @@ navigator.serviceWorker.addEventListener('message', async (event) => {
     await cacheSanta(santa);
   }
 
+  if (event.data === "finished") {
+    document.querySelector("p.notification").innerHTML = "The time has expired.";
+  }
+
   if (event.data === "done") {
     location.href = "/well-done.html";
+  }
+
+  if ((event.data === "not yet") && (await localforage.getItem('isGameFinished') === true)) {
+    location.href = "/shame.html";
   }
 });
 
