@@ -11,13 +11,24 @@
   <body>
     <div class="wrapper">
       <div class="wrapper-content">
-          <a href="#" onclick="event.preventDefault(); logout();" style="color: red; position: absolute;">logout</a>
-    
+          <div style="display: flex; justify-content: flex-end;">
+            <a href="#" onclick="event.preventDefault(); logout();" 
+              style="text-align: right; text-decoration: none; font-size: 2em; color: #fff;">
+              <span>&#9211;</span>
+            </a>
+          </div>
+
           <img src="./images/thank_you.svg" alt="santa" width="221" class="santa-icon">
-    
-          <h1>Thank you!</h1>
+
+          <h1>Thank you for registering <span id='current-santa'></span>!</h1>
+          <div>&nbsp;</div>
+          <div>&nbsp;</div>
+          <p class="notification">Our Secret Santa Generator will randomly assign names that participants will be sending a gift to</p>
+          <div>&nbsp;</div>
+          <div>&nbsp;</div>
+          <!-- <h1>Thank you!</h1>
           <p><span id='current-santa'></span>, you have just registered to be an awesome <b>Secret Santa!</b></p>
-          <p class="notification">We will NOTIFY you soon whom you should buy a gift to.</p>
+          <p class="notification">We will NOTIFY you soon whom you should buy a gift to.</p> -->
     
           <div class="table-responsive">
             <table class="table table-bordered">
