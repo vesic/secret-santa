@@ -13,6 +13,10 @@ html, body {
   height: 100%;
 }
 
+:root {
+  --left-var: 0;
+}
+
 body {
   background: 
     url("./images/secret_santa_bg.png") center center no-repeat fixed,
@@ -34,6 +38,7 @@ body {
   max-width: 320px;
   text-align: center;
   padding: 20px 0 85px 0;
+  overflow: hidden;
 }
 
 .offline-message {
@@ -147,4 +152,30 @@ footer {
 footer span {
   color: #104B6F;
   font-size: 14px;
+}
+
+.santa-names-wrapper {
+  height: 100px;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  position: relative;
+  animation: slidein infinite linear;
+}
+
+.santa-name {
+  opacity: .4;
+  transform: rotate(-15deg);
+  padding: 0px 15px;
+  white-space: nowrap;
+}
+
+@keyframes slidein {
+  from {
+    transform: translateX(535px);
+  }
+  to {
+    transform: translateX(var(--left-var));
+  }
 }

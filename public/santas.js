@@ -6,16 +6,28 @@ if (!isLoggedIn()) {
 (async () => {
   let res = await fetch("/api/santas");
   let json = await res.json();
-  const table = document.querySelector("table");
-  json.data.map((santa, index) => {
-    const row = table.insertRow();
-    const cell0 = row.insertCell(0);
-    const cell1 = row.insertCell(1);
-    const cell2 = row.insertCell(2);
-    cell0.appendChild(document.createTextNode(index + 1));
-    cell1.appendChild(document.createTextNode(santa.name));
-    cell2.appendChild(document.createTextNode(santa.email));
+  let santas = json.data;
+  const wrapper = document.getElementsByClassName("santa-names-wrapper")[0];
+  let leftProperty = -535;
+  let duration = 8;
+
+  santas.forEach(santa => {
+    const santaParagraph = document.createElement("p");
+    santaParagraph.innerHTML = santa.name;
+    santaParagraph.className = "santa-name"; 
+    wrapper.appendChild(santaParagraph);   
+
+    if (santas.length >= 5) {
+      santaWidth = document.getElementsByClassName("santa-name")[0].offsetWidth;
+      leftProperty = leftProperty - santaWidth;
+      duration = duration + 2;
+    }
   });
-  const { name, email } = getCurrentSanta();
+
+  wrapper.style.animationDuration = `${duration}s`;
+  
+  document.documentElement.style.setProperty('--left-var', `${leftProperty}px`);
+  
+  const { name } = getCurrentSanta();
   document.querySelector('#current-santa').innerHTML = `${name}`;
 })();
