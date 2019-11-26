@@ -24,6 +24,8 @@ let duration = 10;
   const { name } = getCurrentSanta();
   const giftReceiver = await localforage.getItem("giftReceiver");
   if (giftReceiver) {
+    const invitation = document.getElementById("invitation-wrapper");
+    invitation.removeAttribute("hidden");
     showGiftReceiverMsg(giftReceiver);
   }
   document.querySelector('#current-santa').innerHTML = `${name}`;
@@ -51,7 +53,7 @@ navigator.serviceWorker.addEventListener('message', async (event) => {
 });
 
 function showGiftReceiverMsg(receiver) {
-  document.querySelector("p.notification").innerHTML = `You should buy a gift to ${receiver.name} (${receiver.email})!`;
+  document.querySelector("p.recipient").innerHTML = `You are chosen to be the Secret Santa to: ${receiver.name}`;
 }
 
 async function cacheSanta(santa) {

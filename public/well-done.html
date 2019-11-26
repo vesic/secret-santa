@@ -1,1 +1,56 @@
-WELL DONE PAGE
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Congrats</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <!-- Add link rel manifest -->
+    <link rel="manifest" href="manifest.json">
+    <!-- Add iOS meta tags and icons -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Weather PWA">
+    <link rel="apple-touch-icon" href="/images/icons/icon_152x152.png">
+    <!-- Add description here -->
+    <meta name="description" content="A Secret Santa App">
+    <!-- CODELAB: Add meta theme-color -->
+    <meta name="theme-color" content="#2F3BA2" />
+  </head>
+  <body>
+    <div id="butInstall" hidden>Add To Home Screen</div>
+    <div class="wrapper">
+        <div class="wrapper-content">
+            <a href="#" onclick="event.preventDefault(); logout();" style="color: red; position: absolute;">logout</a>
+    
+            <img src="./images/happy.svg" alt="santa" width="221" class="santa-icon">
+    
+            <h1>Congrats!</h1>
+            <p>You are such an awesome Secret Santa! 
+                <br>
+                <b>North Pole is so proud of you!</b>
+            </p>
+            <div class="invitation">
+                <img src="./images/santa_address.svg" alt="santa_address" class="address">
+                <img src="./images/santa_stamp.svg" alt="santa_stamp" class="stamp">
+                <p>Opening Secret Santa Present event is scheduled for
+                    <br><b>December the 6th , 2019.</b>
+                    <br><b>At 13:00 o’ clock.</b>
+                </p>            
+            </div>
+            <p class="notification blue">Welcome to the Celebration!</p>
+        </div>
+    </div>
+    <footer>
+      <span>
+        Made with <span style="color: #e25555;">&#9829;</span> by Web Application Developers Team
+      </span>
+    </footer>
+    <script src="/auth.service.js"></script>
+    <script src="/localforage.js"></script>  
+    <script src="/install.js"></script>  
+  </body>
+</html>

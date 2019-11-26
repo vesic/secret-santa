@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Home</title>
+    <title>Shame</title>
     <link rel="stylesheet" href="/styles.css" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -26,23 +26,25 @@
       <div class="wrapper-content">
         <a href="#" onclick="event.preventDefault(); logout();" style="color: red; position: absolute;">logout</a>
   
-        <img src="./images/thank_you.svg" alt="santa" width="221" class="santa-icon">
+        <img src="./images/shame.svg" alt="santa" width="221" class="santa-icon">
   
-        <h1>Thank you!</h1>
-        <p><span id='current-santa'></span>, you have just registered to be an awesome <b>Secret Santa!</b></p>
-        <p class="notification recipient">We will NOTIFY you soon to whom you should buy a gift.</p>
-        <div class="invitation-wrapper" hidden>
-          <div class="invitation">
-              <img src="./images/santa_address.svg" alt="santa_address" class="address">
-              <img src="./images/santa_stamp.svg" alt="santa_stamp" class="stamp">
-              <p>Opening Secret Santa Present event is scheduled for
-                  <br><b>December the 6th , 2019.</b>
-                  <br><b>At 13:00 o’ clock.</b>
-              </p>            
-          </div>
-          <p class="notification">Please buy a gift by that date.</p>
+        <h1>Shame on you!</h1>
+        <p>You are such an awful Secret Santa! 
+            <br>
+            <b>North Pole is so disappointed with you!</b>
+        </p>
+        <div class="invitation">
+            <img src="./images/santa_address.svg" alt="santa_address" class="address">
+            <img src="./images/santa_stamp.svg" alt="santa_stamp" class="stamp">
+            <p>Opening Secret Santa Present event is scheduled for
+                <br><b>December the 6th , 2019.</b>
+                <br><b>At 13:00 o’ clock.</b>
+            </p>            
         </div>
-        <div class="santa-names-wrapper"></div>
+        <p class="notification">
+          <span class="blue">Welcome to the Celebration!</span>
+          <br>Be brave, come and accept the shame!
+        </p>
       </div>
     </div>
     <footer>
@@ -51,8 +53,7 @@
       </span>
     </footer>
     <script src="/auth.service.js"></script>
-    <script src="/localforage.js"></script>    
-    <script src="/santas.js"></script>
-    <script src="/install.js"></script>
+    <script src="/localforage.js"></script>  
+    <script src="/install.js"></script>  
   </body>
 </html>
