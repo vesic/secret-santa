@@ -11,10 +11,6 @@ let duration = 10;
   let res = await fetch("/api/santas");
   let json = await res.json();
 
-  // TODO: https://stackoverflow.com/questions/43043113/how-to-force-reloading-a-page-when-using-browser-back-button
-  // (when we navigate back from other page using Back button, data are not loaded properly if new registrations happened in the meantime)
-  console.log("FETCHED SANTAS: ", json);
-
   json.data.forEach(showSanta);
 
   wrapper.style.animationDuration = `${duration}s`;
