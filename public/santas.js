@@ -11,10 +11,6 @@ let duration = 10;
   let res = await fetch("/api/santas");
   let json = await res.json();
 
-  // TODO: https://stackoverflow.com/questions/43043113/how-to-force-reloading-a-page-when-using-browser-back-button
-  // (when we navigate back from other page using Back button, data are not loaded properly if new registrations happened in the meantime)
-  console.log("FETCHED SANTAS: ", json);
-
   json.data.forEach(showSanta);
 
   wrapper.style.animationDuration = `${duration}s`;
@@ -22,11 +18,19 @@ let duration = 10;
   document.documentElement.style.setProperty('--left-var', `${leftProperty}px`);
 
   const { name } = getCurrentSanta();
-  const giftReceiver = await localforage.getItem("giftReceiver");
-  if (giftReceiver) {
-    const invitation = document.getElementById("invitation-wrapper");
-    invitation.removeAttribute("hidden");
-    showGiftReceiverMsg(giftReceiver);
+
+  if (await localforage.getItem("isGameFinished")) {
+  
+    showGameOverMessage();
+  
+  } else {
+
+    const giftReceiver = await localforage.getItem("giftReceiver");
+    if (giftReceiver) {
+      const invitation = document.getElementById("invitation-wrapper");
+      invitation.removeAttribute("hidden");
+      showGiftReceiverMsg(giftReceiver);
+    }
   }
   document.querySelector('#current-santa').innerHTML = `${name}`;
 })();
@@ -47,13 +51,25 @@ navigator.serviceWorker.addEventListener('message', async (event) => {
     await cacheSanta(santa);
   }
 
+  if (event.data === "finished") {
+    showGameOverMessage();
+  }
+
   if (event.data === "done") {
     location.href = "/well-done.html";
+  }
+
+  if ((event.data === "not yet") && (await localforage.getItem('isGameFinished') === true)) {
+    location.href = "/shame.html";
   }
 });
 
 function showGiftReceiverMsg(receiver) {
   document.querySelector("p.recipient").innerHTML = `You are chosen to be the Secret Santa to: ${receiver.name}`;
+}
+
+function showGameOverMessage() {
+  document.querySelector("p.notification").innerHTML = "The time has expired!";
 }
 
 async function cacheSanta(santa) {

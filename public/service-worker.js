@@ -1,16 +1,19 @@
 importScripts("/localforage.js");
 
-const CACHE_NAME = "secret-santa-cache-v2";
+const CACHE_NAME = "secret-santa-cache-v1";
 const DATA_CACHE_NAME = 'secret-santa-data-cache-v1';
 
 const isPresentAlreadyBoughtKey = 'isPresentBought';
 const giftReceiverKey = 'giftReceiver';
+const isGameFinishedKey = 'isGameFinished';
 
 const FILES_TO_CACHE = [
   // PAGES
   '/',
   'index.html',
   'santas.html',
+  'well-done.html',
+  'shame.html',
 
   // STYLES
   'styles.css',
@@ -20,6 +23,7 @@ const FILES_TO_CACHE = [
   'install.js',
   'register.js',
   'santas.js',
+  'network.js',
 
   // IMAGES
   'images/congrats.svg',
@@ -140,19 +144,35 @@ self.addEventListener("push", async function(event) {
   let showNotification = true;
 
   // TODO: Use a different notification name (e.g. Remind All)
-  if (payload === "Notify All!") {
-    body = "Have you bought a present?";
-    actions = [  
-      {action: 'done', title: 'Yes'},  
-      {action: 'not yet', title: 'No'}
-    ];  
-    showNotification = !await localforage.getItem(isPresentAlreadyBoughtKey);
+  const isGameFinished = (payload === "Terminate");
+  if ((payload === "Notify All!") || isGameFinished) {
+    await buildGiftReminderNotification(isGameFinished);
+    if (isGameFinished) {
+      postMessageToClients("finished");
+    }
   } else {
     body = isPayloadString ? payload : buildMessage(payload);
   }
 
   if (showNotification) {
     event.waitUntil(self.registration.showNotification("Secret Santa", { body , actions }));
+  }
+
+  async function buildGiftReminderNotification(isGameFinished = false) {
+
+    await localforage.setItem(isGameFinishedKey, isGameFinished);
+    body = isGameFinished ? "The time has expired! " : "";
+    const isPresentBought = await localforage.getItem(isPresentAlreadyBoughtKey);
+
+    if (!isPresentBought) {
+      body += "Have you bought a present?";
+      actions = [  
+        {action: 'done', title: 'Yes'},  
+        {action: 'not yet', title: 'No'}
+      ];  
+    }
+
+    showNotification = isGameFinished || !isPresentBought;
   }
 });
 

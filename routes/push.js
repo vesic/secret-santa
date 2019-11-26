@@ -34,6 +34,15 @@ module.exports = function(app, route, webPush) {
     res.sendStatus(201);
   });
 
+  app.get("/terminate", async (req, res) => {
+    const registrations = (await Santa.find({})).map(s => s.registration);
+    const promises = registrations.map(reg =>
+      webPush.sendNotification(JSON.parse(reg), JSON.stringify("Terminate"))
+    );
+    await Promise.all(promises);
+    res.sendStatus(201);
+  });
+
 
   app.get('/launch', async (req, res) => {
     const santas = shuffle((await Santa.find({}).select('_id')))

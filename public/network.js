@@ -1,19 +1,14 @@
 function handleNetworkChange() {
   
-    const isSantasPageActive = location.href.includes('santas.html');
-    const isRegistrationPageActive = !isSantasPageActive;
-
     if (navigator.onLine) {
       document.body.classList.remove("offline");
-      if (isSantasPageActive) {
-        fetchSantas();
-      }
     } else {
       document.body.classList.add("offline");
     }
 
-    if (isRegistrationPageActive) {
-        document.querySelector("button[type='submit']").disabled = !navigator.onLine;
+    const registerButton = document.querySelector("button[type='submit']");
+    if (registerButton) {
+        registerButton.disabled = !navigator.onLine;
     }
   }
   

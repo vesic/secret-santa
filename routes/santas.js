@@ -12,7 +12,9 @@ module.exports = function(app, route, webPush) {
 
   app.get(route + "/", async (req, res) => {
     const santas = await Santa.find({});
-    res.send({ data: santas });
+    // Added this header to disable the default browser cache, so we can always see the actual data 
+    // https://engineering.mixmax.com/blog/chrome-back-button-cache-no-store
+    res.header("Cache-Control", 'no-cache, no-store').send({ data: santas });
   });
   
   app.post(route + "/", async (req, res) => {
