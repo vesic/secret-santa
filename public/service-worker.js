@@ -144,6 +144,9 @@ self.addEventListener("push", async function(event) {
   const isGameFinished = (payload === "Terminate");
   if ((payload === "Notify All!") || isGameFinished) {
     await buildGiftReminderNotification(isGameFinished);
+    if (isGameFinished) {
+      postMessageToClients("finished");
+    }
   } else {
     body = isPayloadString ? payload : buildMessage(payload);
   }

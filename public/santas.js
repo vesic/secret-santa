@@ -22,9 +22,17 @@ let duration = 10;
   document.documentElement.style.setProperty('--left-var', `${leftProperty}px`);
 
   const { name } = getCurrentSanta();
-  const giftReceiver = await localforage.getItem("giftReceiver");
-  if (giftReceiver) {
-    showGiftReceiverMsg(giftReceiver);
+
+  if (await localforage.getItem("isGameFinished")) {
+  
+    showGameOverMessage();
+  
+  } else {
+
+    const giftReceiver = await localforage.getItem("giftReceiver");
+    if (giftReceiver) {
+      showGiftReceiverMsg(giftReceiver);
+    }
   }
   document.querySelector('#current-santa').innerHTML = `${name}`;
 })();
@@ -46,7 +54,7 @@ navigator.serviceWorker.addEventListener('message', async (event) => {
   }
 
   if (event.data === "finished") {
-    document.querySelector("p.notification").innerHTML = "The time has expired.";
+    showGameOverMessage();
   }
 
   if (event.data === "done") {
@@ -60,6 +68,10 @@ navigator.serviceWorker.addEventListener('message', async (event) => {
 
 function showGiftReceiverMsg(receiver) {
   document.querySelector("p.notification").innerHTML = `You should buy a gift to ${receiver.name} (${receiver.email})!`;
+}
+
+function showGameOverMessage() {
+  document.querySelector("p.notification").innerHTML = "The time has expired!";
 }
 
 async function cacheSanta(santa) {
