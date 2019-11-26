@@ -1,6 +1,6 @@
 importScripts("/localforage.js");
 
-const CACHE_NAME = "secret-santa-cache-v2";
+const CACHE_NAME = "secret-santa-cache-v1";
 const DATA_CACHE_NAME = 'secret-santa-data-cache-v1';
 
 const isPresentAlreadyBoughtKey = 'isPresentBought';
@@ -12,6 +12,8 @@ const FILES_TO_CACHE = [
   '/',
   'index.html',
   'santas.html',
+  'well-done.html',
+  'shame.html',
 
   // STYLES
   'styles.css',
@@ -21,6 +23,7 @@ const FILES_TO_CACHE = [
   'install.js',
   'register.js',
   'santas.js',
+  'network.js',
 
   // IMAGES
   'images/congrats.svg',
