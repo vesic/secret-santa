@@ -4,18 +4,12 @@ if (!isLoggedIn()) {
 }
 
 const wrapper = document.getElementsByClassName("santa-names-wrapper")[0];
-let leftProperty = -535;
-let duration = 10;
 
 (async () => {
   let res = await fetch("/api/santas");
   let json = await res.json();
 
   json.data.forEach(showSanta);
-
-  wrapper.style.animationDuration = `${duration}s`;
-  
-  document.documentElement.style.setProperty('--left-var', `${leftProperty}px`);
 
   const { name } = getCurrentSanta();
 
@@ -97,14 +91,8 @@ async function getSantasFromCache() {
 }
 
 function showSanta(santa, index) {
-  const santaParagraph = document.createElement("p");
+  const santaParagraph = document.createElement("li");
     santaParagraph.innerHTML = santa.name;
-    santaParagraph.className = "santa-name"; 
+    santaParagraph.setAttribute("style", `--animation-order: ${index + 1};`); 
     wrapper.appendChild(santaParagraph);   
-
-    if (index >= 4) {
-      santaWidth = document.getElementsByClassName("santa-name")[0].offsetWidth;
-      leftProperty = leftProperty - santaWidth;
-      duration = duration + 2;
-    }
 }

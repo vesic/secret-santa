@@ -161,20 +161,39 @@ footer span {
 }
 
 .santa-names-wrapper {
-  height: 100px;
-  width: 100%;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  position: relative;
-  animation: slidein infinite linear;
+  padding: 0;
+  display: block;
+  margin: 24px auto;
+  width: 320px;
 }
 
-.santa-name {
-  opacity: .4;
-  transform: rotate(-15deg);
-  padding: 0px 15px;
-  white-space: nowrap;
+.santa-names-wrapper li {
+  background-color: rgba(16, 75, 111, .6);
+  height: 52px;
+  width: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  animation-name: animateIn;
+  animation-duration: 350ms;
+  animation-delay: calc(var(--animation-order) * 100ms);
+  animation-fill-mode: both;
+  animation-timing-function: ease-in-out;
+}
+
+li + li {
+  margin-top: 16px;
+}
+
+@keyframes animateIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.6) translateY(-8px);
+  }
+  
+  100% {
+    opacity: 1;
+  }
 }
 
 .invitation {
@@ -230,13 +249,4 @@ footer span {
 
 .btnInstall.show {
   transform: translateY(0);
-}
-
-@keyframes slidein {
-  from {
-    transform: translateX(535px);
-  }
-  to {
-    transform: translateX(var(--left-var));
-  }
 }
