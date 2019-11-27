@@ -217,13 +217,19 @@ footer span {
   right: -20px;
 }
 
-#butInstall {
+.btnInstall {
   background: #4BB386;
   font-size: 16px;
   font-weight: 700;
   text-align: center;
   padding: 14px;
   cursor: pointer;
+  transform: translateY(-50px);
+  transition: transform 1.5s ease-out;
+}
+
+.btnInstall.show {
+  transform: translateY(0);
 }
 
 @keyframes slidein {
