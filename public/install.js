@@ -20,6 +20,10 @@ function saveBeforeInstallPromptEvent(evt) {
   setTimeout(() => {
     installButton.className += " show";
   }, 500);
+  setTimeout(() => {
+    installButton.innerHTML = `<img src="./images/download.svg" width="20px"></img>`
+    installButton.className += " shrink"
+  }, 10000);
 }
 
 
