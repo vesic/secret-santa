@@ -12,16 +12,22 @@ module.exports = function(app, route, webPush) {
 
   app.get(route + "/", async (req, res) => {
     const santas = await Santa.find({});
-    // Added this header to disable the default browser cache, so we can always see the actual data 
+    // Added this header to disable the default browser cache, so we can always see the actual data
     // https://engineering.mixmax.com/blog/chrome-back-button-cache-no-store
-    res.header("Cache-Control", 'no-cache, no-store').send({ data: santas });
+    res.header("Cache-Control", "no-cache, no-store").send({ data: santas });
   });
-  
+
   app.post(route + "/", async (req, res) => {
     const { error } = validate(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
+    if (error) {
+      return res.status(400).send({ error: error.details[0].message });
+    }
     let santa = await Santa.findOne({ email: req.body.email });
-    if (santa) return res.status(400).send("Santa already registered.");
+    if (santa) {
+      return res.status(400).send({
+        error: "Santa already registered."
+      });
+    }
     santa = new Santa({
       name: req.body.name,
       password: req.body.password,
@@ -41,10 +47,13 @@ module.exports = function(app, route, webPush) {
     });
     // todo: is next block ok to call after res.send
     const promises = santas.map(current =>
-      webPush.sendNotification(JSON.parse(current.registration), JSON.stringify({
-        data: santa,
-        type: "registration",
-      }))
+      webPush.sendNotification(
+        JSON.parse(current.registration),
+        JSON.stringify({
+          data: santa,
+          type: "registration"
+        })
+      )
     );
     await Promise.all(promises);
   });
@@ -53,13 +62,13 @@ module.exports = function(app, route, webPush) {
   // shoud be examined & removed
   app.post(route + "/log-out", async (req, res) => {
     let id = req.body.id;
-    if (!id) req.send({ error: 'No id!' });
+    if (!id) req.send({ error: "No id!" });
     let santa = await Santa.findById(id);
     santa.registration = undefined;
     santa.save();
     res.send({
       message: "Santa registration removed."
-    })
+    });
   });
 
   // utility routes
@@ -85,4 +94,3 @@ module.exports = function(app, route, webPush) {
     });
   });
 };
-

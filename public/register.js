@@ -19,7 +19,7 @@ if (isLoggedIn()) {
     evt.preventDefault();
     const name = document.querySelector("#name");
     const email = document.querySelector("#email");
-    const registration = localStorage.getItem('keys:auth')
+    const registration = localStorage.getItem("keys:auth");
     // const password = document.querySelector("#pass");
     fetch("/api/santas", {
       method: "POST",
@@ -35,16 +35,24 @@ if (isLoggedIn()) {
       })
     })
       .then(response => {
-        // handle token if ok
+        if (response.status === 400) {
+          return response.json().then(res => {
+            throw res;
+          });
+        }
         response.headers.forEach((value, name) => {
-          if (name === 'x-auth-token') {
-            saveToken(value)
+          if (name === "x-auth-token") {
+            saveToken(value);
           }
         });
         return response.json();
       })
-      .catch(console.error)
-      .finally(() => window.location.href = "/santas.html");
+      .then(res => {
+        window.location.href = "/santas.html";
+      })
+      .catch(e => {
+        window.alert(e.error);
+      });
   });
 })();
 
@@ -81,9 +89,9 @@ if (isLoggedIn()) {
           subscription: subscription
         })
       })
-      .then(res => res.json())
-      .then((res) => {
-        localStorage.setItem('keys:auth', res['subscription.keys.auth'])
-      })
+        .then(res => res.json())
+        .then(res => {
+          localStorage.setItem("keys:auth", res["subscription.keys.auth"]);
+        });
     });
 })();
