@@ -1,42 +1,5 @@
 importScripts("/localforage.js");
-
-const CACHE_NAME = "secret-santa-cache-v1";
-const DATA_CACHE_NAME = 'secret-santa-data-cache-v1';
-
-const isPresentAlreadyBoughtKey = 'isPresentBought';
-const giftReceiverKey = 'giftReceiver';
-const isGameFinishedKey = 'isGameFinished';
-
-const FILES_TO_CACHE = [
-  // PAGES
-  '/',
-  'index.html',
-  'santas.html',
-  'well-done.html',
-  'shame.html',
-
-  // STYLES
-  'styles.css',
-  
-  // SCRIPTS
-  'auth.service.js',
-  'install.js',
-  'register.js',
-  'santas.js',
-  'network.js',
-
-  // IMAGES
-  'images/congrats.svg',
-  'images/happy.svg',
-  'images/santa_address.svg',
-  'images/santa_stamp.svg',
-  'images/santa.svg',
-  'images/secret_santa_bg.png',
-  'images/secret_santa_icon.svg',
-  'images/shame.svg',
-  'images/thank_you.svg',
-  'images/wondering.svg',
-];
+importScripts("/constants.js");
 
 self.addEventListener("install", event => {
 
@@ -68,7 +31,7 @@ self.addEventListener('activate', async (event) => {
     })
   );
 
-  await localforage.setItem(isPresentAlreadyBoughtKey, false);
+  await localforage.setItem(IS_PRESENT_BOUGHT_KEY, false);
 
   self.clients.claim();
 });
@@ -136,7 +99,7 @@ self.addEventListener("push", async function(event) {
 
   if (payload.type === "launch") {
     postMessageToClients(payload);
-    await localforage.setItem(giftReceiverKey, payload.data);
+    await localforage.setItem(GIFT_RECEIVER_KEY, payload.data);
   }
 
   let body = null;
@@ -160,9 +123,9 @@ self.addEventListener("push", async function(event) {
 
   async function buildGiftReminderNotification(isGameFinished = false) {
 
-    await localforage.setItem(isGameFinishedKey, isGameFinished);
+    await localforage.setItem(IS_GAME_FINISHED_KEY, isGameFinished);
     body = isGameFinished ? "The time has expired! " : "";
-    const isPresentBought = await localforage.getItem(isPresentAlreadyBoughtKey);
+    const isPresentBought = await localforage.getItem(IS_PRESENT_BOUGHT_KEY);
 
     if (!isPresentBought) {
       body += "Have you bought a present?";
@@ -188,7 +151,7 @@ self.addEventListener('notificationclick', function(event) {
     }
   );
 
-  localforage.setItem(isPresentAlreadyBoughtKey, event.action === 'done');
+  localforage.setItem(IS_PRESENT_BOUGHT_KEY, event.action === 'done');
 
 }, false);
 

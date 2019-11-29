@@ -13,13 +13,13 @@ const wrapper = document.getElementsByClassName("santa-names-wrapper")[0];
 
   const { name } = getCurrentSanta();
 
-  if (await localforage.getItem("isGameFinished")) {
+  if (await localforage.getItem(IS_GAME_FINISHED_KEY)) {
   
     showGameOverMessage();
   
   } else {
 
-    const giftReceiver = await localforage.getItem("giftReceiver");
+    const giftReceiver = await localforage.getItem(GIFT_RECEIVER_KEY);
     if (giftReceiver) {
       const invitation = document.getElementById("invitation-wrapper");
       invitation.removeAttribute("hidden");
@@ -53,7 +53,7 @@ navigator.serviceWorker.addEventListener('message', async (event) => {
     location.href = "/well-done.html";
   }
 
-  if ((event.data === "not yet") && (await localforage.getItem('isGameFinished') === true)) {
+  if ((event.data === "not yet") && (await localforage.getItem(IS_GAME_FINISHED_KEY) === true)) {
     location.href = "/shame.html";
   }
 });
@@ -81,8 +81,7 @@ async function cacheSanta(santa) {
 }
 
 async function getSantasFromCache() {
-  // TODO: put all constants into a separate file
-  const cache = await caches.open('secret-santa-data-cache-v1');
+  const cache = await caches.open(DATA_CACHE_NAME);
   const cachedRequests = await cache.keys();
   const santasKey = cachedRequests.filter(request => request.url.includes('api/santas'))[0];
   const santasResponse = await cache.match(santasKey);
