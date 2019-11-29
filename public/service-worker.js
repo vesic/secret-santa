@@ -106,9 +106,8 @@ self.addEventListener("push", async function(event) {
   let actions = [];
   let showNotification = true;
 
-  // TODO: Use a different notification name (e.g. Remind All)
   const isGameFinished = (payload === "Terminate");
-  if ((payload === "Notify All!") || isGameFinished) {
+  if ((payload === "Reminder") || isGameFinished) {
     await buildGiftReminderNotification(isGameFinished);
     if (isGameFinished) {
       postMessageToClients("finished");

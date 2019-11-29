@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "db:purge": "curl http://localhost:3000/api/santas/purge",
     "db:seed": "curl http://localhost:3000/api/santas/seed",
-    "notify-all": "curl http://localhost:3000/notify-all",
+    "remind-all": "curl http://localhost:3000/remind-all",
     "terminate": "curl http://localhost:3000/terminate",
     "launch": "curl http://localhost:3000/launch",
     "dev": "./node_modules/.bin/nodemon index",
