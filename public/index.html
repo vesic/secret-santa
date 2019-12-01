@@ -6,9 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Register</title>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/styles.css" />
-
-    
+    <link rel="stylesheet" href="/css/styles.css" />
 
     <!-- Add link rel manifest -->
     <link rel="manifest" href="manifest.json">
@@ -24,17 +22,27 @@
   </head>
 
   <body>
-    <div class="btnInstall" hidden>Add To Home Screen</div>
+    <!-- <div class="btnInstall" hidden>Add To Home Screen</div> -->
+    <div>&nbsp;</div>
+    <div class="top-bar">
+      <div style="font-size: 1.5em;">
+        <span class="icon-offline hidden">&#x2639;</span>
+      </div>
+      <div class="button-install">Install</div>
+    </div>
     <div class="wrapper">
         <div class="wrapper-content">
-          <img src="./images/santa.svg" alt="santa" width="260">
+          <img src="/images/santa.svg" alt="santa" width="260">
 
           <h1>Secret Santa</h1>
-          <!-- <p class="register-message">If you want to be a Secret Santa, please <b>register.</b></p> -->
-          <p class="register-message">
+          <div>&nbsp;</div>
+          <div>&nbsp;</div>
+
+          <h4>Share a few details with our Secret Santa Generator</h4>
+          <!-- <p class="register-message">
             Share a few details with our Secret Santa Generator
-          </p>
-          <p class="offline-message">You are offline, so you cannot register now.</p>
+          </p> -->
+          <!-- <p class="offline-message">You are offline, so you cannot register now.</p> -->
 
           <form>
             <div class="form-group">
@@ -54,9 +62,9 @@
         Made with <span style="color: #e25555;">&#9829;</span> by Web Dev Team
       </span>
     </footer>
-    <script src="/auth.service.js"></script>
-    <script src="/register.js"></script>
-    <script src="/install.js"></script>
-    <script src="/network.js"></script>
+    <script src="/js/auth.service.js"></script>
+    <script src="/js/install.js"></script>
+    <script src="/js/register.js"></script>
+    <script src="/js/network.js"></script>
   </body>
 </html>

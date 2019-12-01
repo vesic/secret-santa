@@ -22,7 +22,7 @@ const wrapper = document.getElementsByClassName("santa-names-wrapper")[0];
     const giftReceiver = await localforage.getItem("giftReceiver");
     if (giftReceiver) {
       const invitation = document.getElementById("invitation-wrapper");
-      invitation.removeAttribute("hidden");
+      // invitation.removeAttribute("hidden");
       showGiftReceiverMsg(giftReceiver);
     }
   }

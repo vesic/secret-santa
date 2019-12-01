@@ -15,6 +15,18 @@ if (isLoggedIn()) {
 }
 
 (async () => {
+  // task 
+  if (window.Notification && Notification.permission !== "denied") {
+    Notification.requestPermission(permission => {
+      let registered = localStorage.getItem('registered')
+      if (permission === "granted" && !registered) {
+        new Notification("Thanks")
+        localStorage.setItem('registered', true)
+      }
+    })
+  }
+  // end
+
   document.querySelector("button[type='submit']").addEventListener("click", evt => {
     evt.preventDefault();
     const name = document.querySelector("#name");
@@ -93,5 +105,16 @@ if (isLoggedIn()) {
         .then(res => {
           localStorage.setItem("keys:auth", res["subscription.keys.auth"]);
         });
-    });
+    })
+    // task 
+    .catch(function(error) {
+        if (Notification.permission === 'denied') {
+          alert('you must have')
+          console.warn('Permission for Notifications was denied');
+        } else {
+            console.error('Unable to subscribe to push.', error);
+        }
+    })
+    // end
+
 })();
