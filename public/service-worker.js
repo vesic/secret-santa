@@ -5,7 +5,7 @@ self.addEventListener("install", event => {
   console.log("[ServiceWorker] Install");
 
   event.waitUntil(
-    caches.open(CACHE_NAME).then(function(cache) {
+    caches.open(CACHE_NAME).then(function (cache) {
       // console.log("[ServiceWorker] Opened cache");
       return cache.addAll(FILES_TO_CACHE);
     })
@@ -14,7 +14,7 @@ self.addEventListener("install", event => {
   self.skipWaiting();
 });
 
-self.addEventListener("activate", async event => {
+self.addEventListener("activate", async (event) => {
   // console.log('[ServiceWorker] Activate');
 
   // Removes previous cached data from disk.
@@ -86,7 +86,22 @@ self.addEventListener("fetch", event => {
   );
 });
 
-self.addEventListener("push", async function(event) {
+self.addEventListener("message", async (event) => {
+  if ((event.data || {}).minutesLeft) {
+    const isPresentBought = await localforage.getItem(IS_PRESENT_BOUGHT_KEY);
+    const giftReceiver = await localforage.getItem(GIFT_RECEIVER_KEY);
+    if (giftReceiver && !isPresentBought) {
+      const body = `${event.data.minutesLeft} minutes left. Have you bought a present?`;
+      const actions = [{ action: "done", title: "Yes" }, { action: "not yet", title: "No" }];
+      event.waitUntil(self.registration.showNotification(
+        "Secret Santa",
+        { body, actions }
+      ));
+    }
+  }
+});
+
+self.addEventListener("push", async (event) => {
   const payload = event.data ? JSON.parse(event.data.text()) : "No payload";
   const isPayloadString = typeof payload === "string" || payload instanceof String;
 
@@ -106,9 +121,9 @@ self.addEventListener("push", async function(event) {
   let actions = [];
   let showNotification = true;
 
-  const isGameFinished = payload === "Terminate";
+  const isGameFinished = (payload === "Terminate");
   if (payload === "Reminder" || isGameFinished) {
-    await buildGiftReminderNotification(isGameFinished);
+    buildGiftReminderNotification(isGameFinished);
     if (isGameFinished) {
       postMessageToClients("finished");
     }
@@ -136,7 +151,7 @@ self.addEventListener("push", async function(event) {
 
 self.addEventListener(
   "notificationclick",
-  function(event) {
+  function (event) {
     event.notification.close();
 
     self.clients.matchAll().then(clients => {

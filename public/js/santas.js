@@ -23,6 +23,9 @@
       showGiftReceiverMsg(giftReceiver);
     }
   }
+
+  startTimer();
+
   document.querySelector("#current-santa").innerHTML = `${name}`;
 
   navigator.serviceWorker.addEventListener("message", async event => {
@@ -93,5 +96,39 @@
     santaParagraph.innerHTML = santa.name;
     santaParagraph.setAttribute("style", `--animation-order: ${index + 1};`);
     wrapper.appendChild(santaParagraph);
+  }
+
+  function startTimer() {
+
+    const endTime = moment('13:00', "HH:mm");
+
+    const intervalId = window.setInterval(() => {
+
+      let currentTime = moment();
+      const timeInfo = getReminderTimeInfo();
+
+      console.log(" TimeInfo: ", timeInfo);
+
+      if (timeInfo.minutesLeft === 0) {
+        window.clearInterval(intervalId);
+        return;
+      }
+
+      if ((timeInfo.minutesLeft % timeInfo.reminderShowingIntervalInMinutes) === 0) {
+        navigator.serviceWorker.controller.postMessage({ minutesLeft: timeInfo.minutesLeft });
+      }
+
+      function getReminderTimeInfo() {
+
+        let minutesLeft = Math.trunc(moment.duration(endTime.diff(currentTime)).asMinutes());
+        const reminderShowingIntervalInMinutes = (minutesLeft > 60) ? 30 : ((minutesLeft > 15) ? 15 : 5);
+
+        return {
+          reminderShowingIntervalInMinutes,
+          minutesLeft,
+        };
+      }
+
+    }, 60000)
   }
 })();
