@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Shame</title>
-    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/css/styles.css" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <!-- Add link rel manifest -->
@@ -21,12 +21,12 @@
     <meta name="theme-color" content="#2F3BA2" />
   </head>
   <body>
-    <div class="btnInstall" hidden>Add To Home Screen</div>
+    <!-- <div class="btnInstall" hidden>Add To Home Screen</div> -->
     <div class="wrapper">
       <div class="wrapper-content">
-        <a href="#" onclick="event.preventDefault(); logout();" style="color: red; position: absolute;">logout</a>
+        <!-- <a href="#" onclick="event.preventDefault(); logout();" style="color: red; position: absolute;">logout</a> -->
   
-        <img src="./images/shame.svg" alt="santa" width="221" class="santa-icon">
+        <img src="/images/shame.svg" alt="santa" width="221" class="santa-icon">
   
         <h1>Shame on you!</h1>
         <p>You are such an awful Secret Santa! 
@@ -48,12 +48,12 @@
       </div>
     </div>
     <footer>
-      <span>
-        Made with <span style="color: #e25555;">&#9829;</span> by Web Application Developers Team
-      </span>
+      <footer>
+        <span> Made with <span style="color: #e25555;">&#9829;</span> by Web Dev Team </span>
+      </footer>
     </footer>
-    <script src="/auth.service.js"></script>
-    <script src="/localforage.js"></script>  
-    <script src="/install.js"></script>  
+    <script src="/js/auth.service.js"></script>
+    <script src="/js/localforage.js"></script>  
+    <script src="/js/install.js"></script>  
   </body>
 </html>
