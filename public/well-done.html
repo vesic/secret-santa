@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Congrats</title>
-    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/css/styles.css" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     
     <!-- Add link rel manifest -->
@@ -21,13 +21,15 @@
     <meta name="theme-color" content="#2F3BA2" />
   </head>
   <body>
-    <button class="btnInstall" hidden>Install</button>
+    <div class="top-bar">
+      <div style="font-size: 1.5em;">
+        <span class="icon-offline hidden">&#x2639;</span>
+      </div>
+      <button class="btnInstall" hidden>Install</button>
+    </div>
     <div class="wrapper">
-        <div class="wrapper-content">
-            <a href="#" onclick="event.preventDefault(); logout();" style="color: red; position: absolute;">logout</a>
-    
+        <div class="wrapper-content">    
             <img src="./images/happy.svg" alt="santa" width="221" class="santa-icon">
-    
             <h1>Congrats!</h1>
             <p>You are such an awesome Secret Santa! 
                 <br>
@@ -46,11 +48,13 @@
     </div>
     <footer>
       <span>
-        Made with <span style="color: #e25555;">&#9829;</span> by Web Application Developers Team
+        Made with <span style="color: #e25555;">&#9829;</span> by Web Dev Team
       </span>
     </footer>
-    <script src="/auth.service.js"></script>
-    <script src="/localforage.js"></script>  
-    <script src="/install.js"></script>  
+    <script src="/lib/localforage.js"></script> 
+    <script src="/js/install.js"></script>
+    <script src="/js/network.js"></script>
+    <script src="/js/auth.service.js"></script>
+    <script src="/js/install.js"></script>  
   </body>
 </html>

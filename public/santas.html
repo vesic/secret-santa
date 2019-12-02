@@ -5,32 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Home</title>
-    <link rel="stylesheet" href="/styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/styles.css" />
 
     <!-- Add link rel manifest -->
-    <link rel="manifest" href="manifest.json">
+    <link rel="manifest" href="manifest.json" />
     <!-- Add iOS meta tags and icons -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-title" content="Weather PWA">
-    <link rel="apple-touch-icon" href="/images/icons/icon_152x152.png">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-title" content="Weather PWA" />
+    <link rel="apple-touch-icon" href="/images/icons/icon_152x152.png" />
     <!-- Add description here -->
-    <meta name="description" content="A Secret Santa App">
+    <meta name="description" content="A Secret Santa App" />
     <!-- CODELAB: Add meta theme-color -->
     <meta name="theme-color" content="#2F3BA2" />
   </head>
   <body>
-    <button class="btnInstall" hidden>Install</button>
+    <div class="top-bar">
+      <div style="font-size: 1.5em;">
+        <span class="icon-offline hidden">&#x2639;</span>
+      </div>
+      <button class="btnInstall" hidden>Install</button>
+    </div>
     <div class="wrapper">
       <div class="wrapper-content">
-        <a href="#" onclick="event.preventDefault(); logout();" style="color: red; position: absolute;">logout</a>
-  
-        <img src="./images/thank_you.svg" alt="santa" width="221" class="santa-icon">
-  
-        <h1>Thank you!</h1>
-        <p><span id='current-santa'></span>, you have just registered to be an awesome <b>Secret Santa!</b></p>
-        <p class="notification recipient">We will NOTIFY you soon to whom you should buy a gift.</p>
-        <div class="invitation-wrapper" hidden>
+        <img src="/images/thank_you.svg" alt="santa" width="221" class="santa-icon" id="santaThanks">
+        <img src="/images/congrats.svg" alt="santa" width="221" class="santa-icon" id="santaCongrats" hidden>
+        <h1 id="header">Thank you!</h1>
+        <p id="message"><span id='current-santa'></span>, you have just registered to be an awesome <b>Secret Santa!</b></p></p>
+        <p class="notification recipient">We'll let you know whom you will be buying a gift for this year</p>
+
+        <div id="invitation-wrapper" hidden>
           <div class="invitation">
               <img src="./images/santa_address.svg" alt="santa_address" class="address">
               <img src="./images/santa_stamp.svg" alt="santa_stamp" class="stamp">
@@ -41,7 +49,6 @@
           </div>
           <p class="notification">Please buy a gift by that date.</p>
         </div>
-        <p class="offline-message">You are offline, so the data can be outdated.</p>
         <ul class="santa-names-wrapper"></ul>
       </div>
     </div>
@@ -50,11 +57,11 @@
         Made with <span style="color: #e25555;">&#9829;</span> by Web Dev Team
       </span>
     </footer>
-    <script src="/auth.service.js"></script>
-    <script src="/localforage.js"></script> 
-    <script src="/constants.js"></script>   
-    <script src="/santas.js"></script>
-    <script src="/install.js"></script>
-    <script src="/network.js"></script>
+    <script src="/js/auth.service.js"></script>
+    <script src="/lib/localforage.js"></script> 
+    <script src="/js/constants.js"></script>   
+    <script src="/js/santas.js"></script>
+    <script src="/js/install.js"></script>
+    <script src="/js/network.js"></script>
   </body>
 </html>

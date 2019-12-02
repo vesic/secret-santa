@@ -19,7 +19,7 @@ html, body {
 
 body {
   background: 
-    url("./images/secret_santa_bg.png") center center no-repeat fixed,
+    url("../images/secret_santa_bg.png") center center no-repeat fixed,
     #2F3BA2;
   background-size: cover;
   font-family: 'Open Sans', sans-serif;
@@ -45,18 +45,18 @@ body {
   display: none;
 }
 
-.register-message {
+/* .register-message {
   display: block;
   margin-top: 2em;
-}
+} */
 
-.offline .offline-message {
+/* .offline .offline-message {
   display: block;
-}
+} */
 
-.offline .register-message {
+/* .offline .register-message {
   display: none;
-}
+} */
 
 h1 {
   font-size: 36px;
@@ -244,9 +244,6 @@ li + li {
   width: 80px;
   height: 40px;
   padding: 12px;
-  position: absolute;
-  right: 10px;
-  top: 10px;
   border: 1px solid #fff;
   border-radius: 3px;
   cursor: pointer;
@@ -256,4 +253,16 @@ li + li {
 
 .btnInstall:hover {
   border-color: rgba(255, 255, 255, .6);
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px;
+  position: absolute;
+}
+
+.hidden {
+  visibility: hidden;
 }

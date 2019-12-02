@@ -1,13 +1,12 @@
-importScripts("/localforage.js");
-importScripts("/constants.js");
+importScripts("/lib/localforage.js");
+importScripts("/js/constants.js");
 
 self.addEventListener("install", event => {
-
   console.log("[ServiceWorker] Install");
-  
+
   event.waitUntil(
     caches.open(CACHE_NAME).then(function(cache) {
-      console.log("[ServiceWorker] Opened cache");
+      // console.log("[ServiceWorker] Opened cache");
       return cache.addAll(FILES_TO_CACHE);
     })
   );
@@ -15,19 +14,20 @@ self.addEventListener("install", event => {
   self.skipWaiting();
 });
 
-self.addEventListener('activate', async (event) => {
-
-  console.log('[ServiceWorker] Activate');
+self.addEventListener("activate", async event => {
+  // console.log('[ServiceWorker] Activate');
 
   // Removes previous cached data from disk.
   event.waitUntil(
-    caches.keys().then((keyList) => {
-      return Promise.all(keyList.map((key) => {
-        if (key !== CACHE_NAME && key !== DATA_CACHE_NAME) {
-          console.log('[ServiceWorker] Removing old cache', key);
-          return caches.delete(key);
-        }
-      }));
+    caches.keys().then(keyList => {
+      return Promise.all(
+        keyList.map(key => {
+          if (key !== CACHE_NAME && key !== DATA_CACHE_NAME) {
+            // console.log('[ServiceWorker] Removing old cache', key);
+            return caches.delete(key);
+          }
+        })
+      );
     })
   );
 
@@ -36,60 +36,60 @@ self.addEventListener('activate', async (event) => {
   self.clients.claim();
 });
 
-self.addEventListener('fetch', (event) => {
-  console.log('[ServiceWorker] Fetch', event.request.url);
+self.addEventListener("fetch", event => {
+  // console.log('[ServiceWorker] Fetch', event.request.url);
 
   // Network falling back to cache strategy
-  // https://developers.google.com/web/fundamentals/instant-and-offline/offline-cookbook/#network-falling-back-to-cache  
+  // https://developers.google.com/web/fundamentals/instant-and-offline/offline-cookbook/#network-falling-back-to-cache
 
   // TODO: Maybe would be better to use "cache then network"?
 
-  if (event.request.url.includes('/api/')) {
-    console.log('[Service Worker] Caching DATA', event.request.url);
+  if (event.request.url.includes("/api/")) {
+    // console.log('[Service Worker] Caching DATA', event.request.url);
     event.respondWith(
-        caches.open(DATA_CACHE_NAME).then((cache) => {
-          console.log('[Service Worker] Caching DATA => cache opened', cache);
-          return fetch(event.request)
-              .then((response) => {
-                // If the response was good, clone it and store it in the cache.
-                if (response.status === 200) {
-                  console.log('[Service Worker] Caching DATA => RESPONSE', response);
-                  cache.put(event.request.url, response.clone());
-                } else {
-                  console.log('[Service Worker] Caching DATA => BAD RESPONSE', response);
-                }
-                return response;
-              }).catch(() => {
-                // Network request failed, try to get it from the cache.
-                console.log('[Service Worker] Caching DATA => FAILED');
-                return cache.match(event.request);
-              });
-        }));
+      caches.open(DATA_CACHE_NAME).then(cache => {
+        // console.log('[Service Worker] Caching DATA => cache opened', cache);
+        return fetch(event.request)
+          .then(response => {
+            // If the response was good, clone it and store it in the cache.
+            if (response.status === 200) {
+              // console.log('[Service Worker] Caching DATA => RESPONSE', response);
+              cache.put(event.request.url, response.clone());
+            } else {
+              // console.log('[Service Worker] Caching DATA => BAD RESPONSE', response);
+            }
+            return response;
+          })
+          .catch(() => {
+            // Network request failed, try to get it from the cache.
+            // console.log('[Service Worker] Caching DATA => FAILED');
+            return cache.match(event.request);
+          });
+      })
+    );
     return;
   }
 
   event.respondWith(
-      caches.open(CACHE_NAME).then((cache) => {
-        console.log(`[Service Worker] STATIC page request:`, event.request)
-        return cache.match(event.request)
-            .then((response) => {
-              console.log('RESPONSE', response);
-              if (response) {
-                console.log(`[Service Worker] STATIC page *** Returned response from cache for ${event.request.url} ***`);
-              } else {
-                console.log(`[Service Worker] STATIC page fetching ${event.request.url}`);
-              }
-              return response || fetch(event.request);
-            });
-      })
+    caches.open(CACHE_NAME).then(cache => {
+      // console.log(`[Service Worker] STATIC page request:`, event.request)
+      return cache.match(event.request).then(response => {
+        // console.log('RESPONSE', response);
+        if (response) {
+          // console.log(`[Service Worker] STATIC page *** Returned response from cache for ${event.request.url} ***`);
+        } else {
+          // console.log(`[Service Worker] STATIC page fetching ${event.request.url}`);
+        }
+        return response || fetch(event.request);
+      });
+    })
   );
 });
 
 self.addEventListener("push", async function(event) {
-
-  const  payload = event.data ? JSON.parse(event.data.text()) : "No payload";
+  const payload = event.data ? JSON.parse(event.data.text()) : "No payload";
   const isPayloadString = typeof payload === "string" || payload instanceof String;
-  
+
   // if receive string show it
   // if receive complex data type generate string
 
@@ -106,8 +106,8 @@ self.addEventListener("push", async function(event) {
   let actions = [];
   let showNotification = true;
 
-  const isGameFinished = (payload === "Terminate");
-  if ((payload === "Reminder") || isGameFinished) {
+  const isGameFinished = payload === "Terminate";
+  if (payload === "Reminder" || isGameFinished) {
     await buildGiftReminderNotification(isGameFinished);
     if (isGameFinished) {
       postMessageToClients("finished");
@@ -117,45 +117,41 @@ self.addEventListener("push", async function(event) {
   }
 
   if (showNotification) {
-    event.waitUntil(self.registration.showNotification("Secret Santa", { body , actions }));
+    event.waitUntil(self.registration.showNotification("Secret Santa", { body, actions }));
   }
 
   async function buildGiftReminderNotification(isGameFinished = false) {
-
     await localforage.setItem(IS_GAME_FINISHED_KEY, isGameFinished);
     body = isGameFinished ? "The time has expired! " : "";
     const isPresentBought = await localforage.getItem(IS_PRESENT_BOUGHT_KEY);
 
     if (!isPresentBought) {
       body += "Have you bought a present?";
-      actions = [  
-        {action: 'done', title: 'Yes'},  
-        {action: 'not yet', title: 'No'}
-      ];  
+      actions = [{ action: "done", title: "Yes" }, { action: "not yet", title: "No" }];
     }
 
     showNotification = isGameFinished || !isPresentBought;
   }
 });
 
-self.addEventListener('notificationclick', function(event) {  
+self.addEventListener(
+  "notificationclick",
+  function(event) {
+    event.notification.close();
 
-  event.notification.close();  
-
-  self.clients.matchAll().then(
-    clients => {
+    self.clients.matchAll().then(clients => {
       clients.forEach(client => {
         client.postMessage(event.action);
-      })
-    }
-  );
+      });
+    });
 
-  localforage.setItem(IS_PRESENT_BOUGHT_KEY, event.action === 'done');
-
-}, false);
+    localforage.setItem(IS_PRESENT_BOUGHT_KEY, event.action === "done");
+  },
+  false
+);
 
 function postMessageToClients(payload) {
-  console.log('[Service Worker] postMessage', payload);
+  // console.log('[Service Worker] postMessage', payload);
   self.clients.matchAll().then(clients => {
     clients.forEach(client => {
       client.postMessage(payload);
