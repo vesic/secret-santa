@@ -20,7 +20,7 @@ function urlB64ToUint8Array(base64String) {
     Notification.requestPermission(permission => {
       let registered = localStorage.getItem("registered");
       if (permission === "granted" && !registered) {
-        new Notification("Thanks");
+        new Notification("Thank you for registering!");
         localStorage.setItem("registered", true);
       }
     });
@@ -107,7 +107,7 @@ function urlB64ToUint8Array(base64String) {
     // task
     .catch(function(error) {
       if (Notification.permission === "denied") {
-        alert("you must have");
+        alert("You must turn on notifications!");
         console.warn("Permission for Notifications was denied");
       } else {
         console.error("Unable to subscribe to push.", error);
