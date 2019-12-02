@@ -237,23 +237,23 @@ li + li {
 }
 
 .btnInstall {
-  background: #4BB386;
-  font-size: 16px;
-  font-weight: 700;
+  background: transparent;
+  color: #fff;
+  font-size: 14px;
   text-align: center;
-  padding: 14px;
-  cursor: pointer;
+  width: 80px;
+  height: 40px;
+  padding: 12px;
   position: absolute;
-  width: 100%;
-  transform: translateY(-50px);
-  transition: all 1.5s ease-out;
+  right: 10px;
+  top: 10px;
+  border: 1px solid #fff;
+  border-radius: 3px;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: border-color .3s ease;
 }
 
-.btnInstall.show {
-  transform: translateY(0);
-}
-
-.btnInstall.shrink {
-  width: 50px;
-  right: 0;
+.btnInstall:hover {
+  border-color: rgba(255, 255, 255, .6);
 }

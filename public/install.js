@@ -17,13 +17,6 @@ function saveBeforeInstallPromptEvent(evt) {
   // Add code to save event & show the install button.
   deferredInstallPrompt = evt;
   installButton.removeAttribute("hidden");
-  setTimeout(() => {
-    installButton.className += " show";
-  }, 500);
-  setTimeout(() => {
-    installButton.innerHTML = `<img src="./images/download.svg" width="20px"></img>`
-    installButton.className += " shrink"
-  }, 10000);
 }
 
 
