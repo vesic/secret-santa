@@ -3,8 +3,8 @@ const { Santa } = require("../models/santa");
 
 function shuffle(a) {
   for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [a[i], a[j]] = [a[j], a[i]];
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
   }
   return a;
 }
@@ -21,8 +21,8 @@ module.exports = function(app, route, webPush) {
     }
     console.log(subscriptions.entries());
     res.status(201).send({
-      'subscription.keys.auth': subscription.keys.auth
-    })
+      "subscription.keys.auth": subscription.keys.auth
+    });
   });
 
   app.get("/remind-all", async (req, res) => {
@@ -43,18 +43,20 @@ module.exports = function(app, route, webPush) {
     res.sendStatus(201);
   });
 
-
-  app.get('/launch', async (req, res) => {
-    const santas = shuffle((await Santa.find({}).select('_id')))
-    let pairs = []
+  app.get("/launch", async (req, res) => {
+    const santas = shuffle(await Santa.find({}).select("_id"));
+    let pairs = [];
     for (let i = 0; i < santas.length - 1; i++) {
-      pairs = [...pairs, { from: santas[i], to: santas[i+1]}]
+      pairs = [...pairs, { from: santas[i], to: santas[i + 1] }];
     }
-    pairs = [...pairs, { from: santas[santas.length - 1], to: santas[0]}]
+    pairs = [...pairs, { from: santas[santas.length - 1], to: santas[0] }];
     const promises = pairs.map(async pair => {
       let from = await Santa.findById(pair.from);
       let to = await Santa.findById(pair.to);
-      return webPush.sendNotification(JSON.parse(from.registration), JSON.stringify({data: to, type:"launch"}));
+      return webPush.sendNotification(
+        JSON.parse(from.registration),
+        JSON.stringify({ data: to, type: "launch" })
+      );
     });
     await Promise.all(promises);
     res.send(pairs);

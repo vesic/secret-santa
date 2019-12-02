@@ -1,19 +1,16 @@
-window.addEventListener('load', (event) => {
-
-  'use strict';
+window.addEventListener("load", event => {
+  "use strict";
 
   let deferredInstallPrompt = null;
   // const installButton = document.getElementsByClassName("btnInstall")[0];
   // installButton.addEventListener("click", installPWA);
-  
+
   const installButton = document.querySelector(".button-install");
-  console.log('http://localhost:3000/');
-  console.log(installButton);
   installButton.addEventListener("click", installPWA);
-  
+
   // Event listener for beforeinstallprompt event
   window.addEventListener("beforeinstallprompt", saveBeforeInstallPromptEvent);
-  
+
   /**
    * Event handler for beforeinstallprompt event.
    *   Saves the event & shows install button.
@@ -32,8 +29,7 @@ window.addEventListener('load', (event) => {
     //   installButton.className += " shrink"
     // }, 10000);
   }
-  
-  
+
   /**
    * Event handler for btnInstall - Does the PWA installation.
    *
@@ -44,17 +40,16 @@ window.addEventListener('load', (event) => {
     deferredInstallPrompt.prompt();
     // evt.srcElement.setAttribute("hidden", true);
     // Log user response to prompt.
-    deferredInstallPrompt.userChoice
-      .then((choice) => {
-        if (choice.outcome === "accepted") {
-          console.log("User accepted the A2HS prompt", choice);
-        } else {
-          console.log("User dismissed the A2HS prompt", choice);
-        }
-        deferredInstallPrompt = null;
-      });
+    deferredInstallPrompt.userChoice.then(choice => {
+      if (choice.outcome === "accepted") {
+        console.log("User accepted the A2HS prompt", choice);
+      } else {
+        console.log("User dismissed the A2HS prompt", choice);
+      }
+      deferredInstallPrompt = null;
+    });
   }
-  
+
   // Add event listener for appinstalled event
   window.addEventListener("appinstalled", logAppInstalled);
   /**
@@ -66,7 +61,5 @@ window.addEventListener('load', (event) => {
   function logAppInstalled(evt) {
     // Add code to log the event
     console.log("Secret Santa App was installed.", evt);
-  
   }
-  
 });

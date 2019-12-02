@@ -9,21 +9,21 @@ function urlB64ToUint8Array(base64String) {
   return outputArray;
 }
 
-// check token
-if (isLoggedIn()) {
-  window.location.href = "/santas.html";
-}
-
 (async () => {
-  // task 
+  // check token
+  if (isLoggedIn()) {
+    window.location.href = "/santas.html";
+  }
+
+  // task
   if (window.Notification && Notification.permission !== "denied") {
     Notification.requestPermission(permission => {
-      let registered = localStorage.getItem('registered')
+      let registered = localStorage.getItem("registered");
       if (permission === "granted" && !registered) {
-        new Notification("Thanks")
-        localStorage.setItem('registered', true)
+        new Notification("Thanks");
+        localStorage.setItem("registered", true);
       }
-    })
+    });
   }
   // end
 
@@ -66,9 +66,7 @@ if (isLoggedIn()) {
         window.alert(e.error);
       });
   });
-})();
 
-(async () => {
   if (!"serviceWorker" in navigator) {
     console.log("Service Worker not supported");
     return;
@@ -76,7 +74,7 @@ if (isLoggedIn()) {
   if (!("PushManager" in window)) {
     throw new Error("No Push API Support");
   }
-  const sw = await navigator.serviceWorker.register("/service-worker.js");
+  const sw = await navigator.serviceWorker.register("../service-worker.js");
   // console.log(sw)
   navigator.serviceWorker.ready
     .then(function(registration) {
@@ -106,15 +104,14 @@ if (isLoggedIn()) {
           localStorage.setItem("keys:auth", res["subscription.keys.auth"]);
         });
     })
-    // task 
+    // task
     .catch(function(error) {
-        if (Notification.permission === 'denied') {
-          alert('you must have')
-          console.warn('Permission for Notifications was denied');
-        } else {
-            console.error('Unable to subscribe to push.', error);
-        }
-    })
-    // end
-
+      if (Notification.permission === "denied") {
+        alert("you must have");
+        console.warn("Permission for Notifications was denied");
+      } else {
+        console.error("Unable to subscribe to push.", error);
+      }
+    });
+  // end
 })();

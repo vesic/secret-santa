@@ -1,3 +1,4 @@
+// (() => {
 function isLoggedIn() {
   return getToken();
 }
@@ -31,7 +32,7 @@ function logout() {
     })
   })
     .then(res => res.json())
-    .then((res) => {
+    .then(res => {
       // do something w/ response
     })
     .finally(() => {
@@ -47,3 +48,4 @@ function getCurrentSanta() {
     return { _id, email, name };
   }
 }
+// })();
