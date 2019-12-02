@@ -25,10 +25,10 @@ module.exports = function(app, route, webPush) {
     })
   });
 
-  app.get("/notify-all", async (req, res) => {
+  app.get("/remind-all", async (req, res) => {
     const registrations = (await Santa.find({})).map(s => s.registration);
     const promises = registrations.map(reg =>
-      webPush.sendNotification(JSON.parse(reg), JSON.stringify("Notify All!"))
+      webPush.sendNotification(JSON.parse(reg), JSON.stringify("Reminder"))
     );
     await Promise.all(promises);
     res.sendStatus(201);
