@@ -117,7 +117,10 @@ self.addEventListener("push", async function(event) {
   }
 
   if (showNotification) {
-    event.waitUntil(self.registration.showNotification("Secret Santa", { body, actions }));
+    // this one errors
+    // will investigate futher I comment it out for time being
+    // event.waitUntil(self.registration.showNotification("Secret Santa", { body, actions }));
+    self.registration.showNotification("Secret Santa", { body, actions });
   }
 
   async function buildGiftReminderNotification(isGameFinished = false) {
