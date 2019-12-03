@@ -15,18 +15,6 @@ function urlB64ToUint8Array(base64String) {
     window.location.href = "/santas.html";
   }
 
-  // task
-  if (window.Notification && Notification.permission !== "denied") {
-    Notification.requestPermission(permission => {
-      let registered = localStorage.getItem("registered");
-      if (permission === "granted" && !registered) {
-        new Notification("Thanks");
-        localStorage.setItem("registered", true);
-      }
-    });
-  }
-  // end
-
   document.querySelector("button[type='submit']").addEventListener("click", evt => {
     evt.preventDefault();
     const name = document.querySelector("#name");
@@ -107,7 +95,7 @@ function urlB64ToUint8Array(base64String) {
     // task
     .catch(function(error) {
       if (Notification.permission === "denied") {
-        alert("you must have");
+        alert("You must turn on notifications!");
         console.warn("Permission for Notifications was denied");
       } else {
         console.error("Unable to subscribe to push.", error);

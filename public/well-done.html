@@ -21,13 +21,15 @@
     <meta name="theme-color" content="#2F3BA2" />
   </head>
   <body>
-    <div class="btnInstall" hidden>Add To Home Screen</div>
+    <div class="top-bar">
+      <div style="font-size: 1.5em;">
+        <span class="icon-offline hidden">&#x2639;</span>
+      </div>
+      <!-- <button class="btnInstall" hidden>Install</button> -->
+    </div>
     <div class="wrapper">
-        <div class="wrapper-content">
-            <!-- <a href="#" onclick="event.preventDefault(); logout();" style="color: red; position: absolute;">logout</a> -->
-    
+        <div class="wrapper-content">    
             <img src="./images/happy.svg" alt="santa" width="221" class="santa-icon">
-    
             <h1>Congrats!</h1>
             <p>You are such an awesome Secret Santa! 
                 <br>
@@ -49,9 +51,9 @@
         Made with <span style="color: #e25555;">&#9829;</span> by Web Dev Team
       </span>
     </footer>
-    <div>&nbsp;</div>
+    <script src="/lib/localforage.js"></script> 
+    <!-- <script src="/js/install.js"></script> -->
+    <script src="/js/network.js"></script>
     <script src="/js/auth.service.js"></script>
-    <script src="/js/localforage.js"></script>  
-    <script src="/js/install.js"></script>  
   </body>
 </html>

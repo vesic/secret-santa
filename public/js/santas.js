@@ -18,15 +18,16 @@
   } else {
     const giftReceiver = await localforage.getItem(GIFT_RECEIVER_KEY);
     if (giftReceiver) {
-      const invitation = document.getElementById("invitation-wrapper");
-      // invitation.removeAttribute("hidden");
       showGiftReceiverMsg(giftReceiver);
     }
   }
 
   startTimer();
 
-  document.querySelector("#current-santa").innerHTML = `${name}`;
+  const currentSanta = document.querySelector("#current-santa");
+  if (currentSanta) {
+    currentSanta.innerHTML = `${name}`;
+  }
 
   navigator.serviceWorker.addEventListener("message", async event => {
     if (!event.data) {
@@ -57,10 +58,20 @@
   });
 
   function showGiftReceiverMsg(receiver) {
-    document.querySelector(
-      "p.recipient"
-    ).innerHTML = `You are chosen to be the Secret Santa to: ${receiver.name}`;
-    document.querySelector("p.recipient").innerHTML = `Buy gift for ${receiver.name}!`;
+    const invitation = document.getElementById("invitation-wrapper");
+    invitation.removeAttribute("hidden");
+
+    document.querySelector("h1#header").innerHTML = `Congrats !`;
+    document.querySelector("p#message").innerHTML = `You are chosen to be the Secret Santa to:`;
+
+    const recipient = document.querySelector("p.recipient")
+    recipient.innerHTML = `${receiver.name}`;
+    recipient.style.cssText = "color: #fff; font-size: 30px; line-height: 40px; font-weight: 400";
+
+    wrapper.removeAttribute("hidden");
+
+    document.getElementById("santaThanks").setAttribute("hidden", "");
+    document.getElementById("santaCongrats").removeAttribute("hidden");
   }
 
   function showGameOverMessage() {

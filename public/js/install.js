@@ -2,10 +2,7 @@ window.addEventListener("load", event => {
   "use strict";
 
   let deferredInstallPrompt = null;
-  // const installButton = document.getElementsByClassName("btnInstall")[0];
-  // installButton.addEventListener("click", installPWA);
-
-  const installButton = document.querySelector(".button-install");
+  const installButton = document.getElementsByClassName("btnInstall")[0];
   installButton.addEventListener("click", installPWA);
 
   // Event listener for beforeinstallprompt event
@@ -20,14 +17,7 @@ window.addEventListener("load", event => {
   function saveBeforeInstallPromptEvent(evt) {
     // Add code to save event & show the install button.
     deferredInstallPrompt = evt;
-    // installButton.removeAttribute("hidden");
-    // setTimeout(() => {
-    //   installButton.className += " show";
-    // }, 500);
-    // setTimeout(() => {
-    //   installButton.innerHTML = `<img src="./images/download.svg" width="20px"></img>`
-    //   installButton.className += " shrink"
-    // }, 10000);
+    installButton.removeAttribute("hidden");
   }
 
   /**
@@ -38,7 +28,7 @@ window.addEventListener("load", event => {
   function installPWA(evt) {
     // Add code show install prompt & hide the install button.
     deferredInstallPrompt.prompt();
-    // evt.srcElement.setAttribute("hidden", true);
+    evt.srcElement.setAttribute("hidden", true);
     // Log user response to prompt.
     deferredInstallPrompt.userChoice.then(choice => {
       if (choice.outcome === "accepted") {

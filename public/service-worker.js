@@ -7,11 +7,9 @@ self.addEventListener("install", event => {
   event.waitUntil(
     caches.open(CACHE_NAME).then(function (cache) {
       // console.log("[ServiceWorker] Opened cache");
-      return cache.addAll(FILES_TO_CACHE);
+      return cache.addAll(FILES_TO_CACHE).then(() => self.skipWaiting());
     })
   );
-
-  self.skipWaiting();
 });
 
 self.addEventListener("activate", async (event) => {
