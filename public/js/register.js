@@ -15,18 +15,6 @@ function urlB64ToUint8Array(base64String) {
     window.location.href = "/santas.html";
   }
 
-  // task
-  if (window.Notification && Notification.permission !== "denied") {
-    Notification.requestPermission(permission => {
-      let registered = localStorage.getItem("registered");
-      if (permission === "granted" && !registered) {
-        new Notification("Thank you for registering!");
-        localStorage.setItem("registered", true);
-      }
-    });
-  }
-  // end
-
   document.querySelector("button[type='submit']").addEventListener("click", evt => {
     evt.preventDefault();
     const name = document.querySelector("#name");
