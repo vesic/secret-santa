@@ -9,12 +9,12 @@ function shuffle(a) {
   return a;
 }
 
-module.exports = function(app, route, webPush) {
-  app.get("/vapidPublicKey", function(req, res) {
+module.exports = function (app, route, webPush) {
+  app.get("/vapidPublicKey", function (req, res) {
     res.send(process.env.VAPID_PUBLIC_KEY);
   });
 
-  app.post("/register", function(req, res) {
+  app.post("/register", function (req, res) {
     const { subscription } = req.body;
     if (!subscriptions.has(subscription.keys.auth)) {
       subscriptions.set(subscription.keys.auth, subscription);
@@ -23,15 +23,6 @@ module.exports = function(app, route, webPush) {
     res.status(201).send({
       "subscription.keys.auth": subscription.keys.auth
     });
-  });
-
-  app.get("/remind-all", async (req, res) => {
-    const registrations = (await Santa.find({})).map(s => s.registration);
-    const promises = registrations.map(reg =>
-      webPush.sendNotification(JSON.parse(reg), JSON.stringify("Reminder"))
-    );
-    await Promise.all(promises);
-    res.sendStatus(201);
   });
 
   app.get("/terminate", async (req, res) => {

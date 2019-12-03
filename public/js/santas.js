@@ -100,6 +100,7 @@
 
   function startTimer() {
 
+    // NOTE: Change this time if needed, make sure that it's greater than the current time
     const endTime = moment('13:00', "HH:mm");
 
     const intervalId = window.setInterval(() => {
@@ -107,7 +108,7 @@
       let currentTime = moment();
       const timeInfo = getReminderTimeInfo();
 
-      console.log(" TimeInfo: ", timeInfo);
+      console.log("TimeInfo: ", timeInfo);
 
       if (timeInfo.minutesLeft === 0) {
         window.clearInterval(intervalId);
@@ -121,6 +122,11 @@
       function getReminderTimeInfo() {
 
         let minutesLeft = Math.trunc(moment.duration(endTime.diff(currentTime)).asMinutes());
+
+        // NOTE: This code decreases interval for showing reminder from 30 to 15 mins, in dependence on how much time has left to the end of the event.
+        // For the demo purposes, we can change that interval to be always 1 min.
+
+        // const reminderShowingIntervalInMinutes = 1;
         const reminderShowingIntervalInMinutes = (minutesLeft > 60) ? 30 : ((minutesLeft > 15) ? 15 : 5);
 
         return {

@@ -88,16 +88,7 @@ self.addEventListener("fetch", event => {
 
 self.addEventListener("message", async (event) => {
   if ((event.data || {}).minutesLeft) {
-    const isPresentBought = await localforage.getItem(IS_PRESENT_BOUGHT_KEY);
-    const giftReceiver = await localforage.getItem(GIFT_RECEIVER_KEY);
-    if (giftReceiver && !isPresentBought) {
-      const body = `${event.data.minutesLeft} minutes left. Have you bought a present?`;
-      const actions = [{ action: "done", title: "Yes" }, { action: "not yet", title: "No" }];
-      event.waitUntil(self.registration.showNotification(
-        "Secret Santa",
-        { body, actions }
-      ));
-    }
+    await buildReminderNotification(event.data.minutesLeft);
   }
 });
 
@@ -117,35 +108,15 @@ self.addEventListener("push", async (event) => {
     await localforage.setItem(GIFT_RECEIVER_KEY, payload.data);
   }
 
-  let body = null;
-  let actions = [];
-  let showNotification = true;
-
   const isGameFinished = (payload === "Terminate");
-  if (payload === "Reminder" || isGameFinished) {
-    buildGiftReminderNotification(isGameFinished);
-    if (isGameFinished) {
-      postMessageToClients("finished");
-    }
+  await localforage.setItem(IS_GAME_FINISHED_KEY, isGameFinished);
+
+  if (isGameFinished) {
+    await buildReminderNotification(0);
+    postMessageToClients("finished");
   } else {
-    body = isPayloadString ? payload : buildMessage(payload);
-  }
-
-  if (showNotification) {
-    event.waitUntil(self.registration.showNotification("Secret Santa", { body, actions }));
-  }
-
-  async function buildGiftReminderNotification(isGameFinished = false) {
-    await localforage.setItem(IS_GAME_FINISHED_KEY, isGameFinished);
-    body = isGameFinished ? "The time has expired! " : "";
-    const isPresentBought = await localforage.getItem(IS_PRESENT_BOUGHT_KEY);
-
-    if (!isPresentBought) {
-      body += "Have you bought a present?";
-      actions = [{ action: "done", title: "Yes" }, { action: "not yet", title: "No" }];
-    }
-
-    showNotification = isGameFinished || !isPresentBought;
+    const body = isPayloadString ? payload : buildMessage(payload);
+    self.registration.showNotification("Secret Santa", { body })
   }
 });
 
@@ -164,6 +135,19 @@ self.addEventListener(
   },
   false
 );
+
+async function buildReminderNotification(minutesLeft) {
+  const isPresentBought = await localforage.getItem(IS_PRESENT_BOUGHT_KEY);
+  const giftReceiver = await localforage.getItem(GIFT_RECEIVER_KEY);
+
+  if (giftReceiver && !isPresentBought) {
+
+    let body = minutesLeft ? `${minutesLeft} minutes left` : `The time has expired.`;
+    body += `Have you bought the present?`;
+    const actions = [{ action: "done", title: "Yes" }, { action: "not yet", title: "No" }];
+    self.registration.showNotification("Secret Santa", { body, actions });
+  }
+}
 
 function postMessageToClients(payload) {
   // console.log('[Service Worker] postMessage', payload);
