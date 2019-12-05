@@ -55,7 +55,11 @@ module.exports = function(app, route, webPush) {
         })
       )
     );
-    await Promise.all(promises);
+    try {
+      await Promise.all(promises);
+    } catch(e) {
+      return res.status({ error: 'Something went wrong' });
+    }
   });
 
   // todo: this is workaround
