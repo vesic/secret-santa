@@ -1,4 +1,3 @@
-// (() => {
 function isLoggedIn() {
   return getToken();
 }
@@ -13,14 +12,6 @@ function saveToken(token) {
 
 function logout() {
   let santa = getCurrentSanta();
-  // todo: ideally we should unregister service worker
-  // navigator.serviceWorker.getRegistrations().then(function(registrations) {
-  //   for (let registration of registrations) {
-  //     console.log(registration);
-  //     registration.unregister();
-  //   }
-  // });
-  // todo: find more sutable place for this
   fetch("/api/santas/log-out", {
     method: "POST",
     headers: {
@@ -48,4 +39,3 @@ function getCurrentSanta() {
     return { _id, email, name };
   }
 }
-// })();
